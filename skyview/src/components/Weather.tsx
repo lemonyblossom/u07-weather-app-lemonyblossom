@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import useGeolocation from '../hooks/useGeolocation';
-import { fetchCurrentWeather, fetchForecastWeather } from '../api/WeatherApi';
+import { fetchCurrentWeather, fetchForecastWeather, API_KEY } from '../api/WeatherApi';
+
 
 //FC = functional component. Takes in props well, but not atm.
 const Weather: React.FC = () => {
@@ -35,11 +36,19 @@ const Weather: React.FC = () => {
       }
    };
 
-   // Function to handle search
+   // search
    const handleSearch = async () => {
       setLoading(true);
       try {
-         // Call API to fetch weather for the searched city
+         if (searchCity) {
+            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=${API_KEY}&units=metric`);
+            if (!response.ok) {
+               throw new Error('City not found');
+            }
+            const data = await response.json();
+            const { coord } = data;
+            fetchWeatherData(coord.lat, coord.lon);
+         }
       } catch (error) {
          console.error('Error fetching weather data for searched city:', error);
       } finally {
@@ -47,13 +56,49 @@ const Weather: React.FC = () => {
       }
    };
 
+   //filter- calculate temp for day and night.
+   const filterForecastData = () => {
+      if (!forecastWeather) return [];
+
+      const filteredData: any[] = [];
+
+      // loop through forecast results
+      forecastWeather.list.forEach((item: any) => {
+         const date = new Date(item.dt * 1000);
+         const dayOfWeek = date.toLocaleDateString(undefined, { weekday: 'long' });
+
+         const existingDay = filteredData.find((data) => data.date === date.toLocaleDateString());
+         if (existingDay) {
+            existingDay.dayTemp = Math.max(existingDay.dayTemp, item.main.temp_max);
+            existingDay.nightTemp = Math.min(existingDay.nightTemp, item.main.temp_min);
+         } else {
+            filteredData.push({
+               date: date.toLocaleDateString(),
+               dayOfWeek: dayOfWeek,
+               dayTemp: item.main.temp_max,
+               nightTemp: item.main.temp_min,
+               description: item.weather[0].description,
+            });
+         }
+      });
+      return filteredData;
+   };
+
+   {/*------------DISPLAY----------*/ }
    return (
       <div>
-         {/* Geolocation Error Handling */}
-         {error && <div>Error: {error}</div>}
+         {/* TODO: Geolocation Error Handling */}
 
 
-         {/* Search Form */}
+
+         {/* City/Country */}
+         {cityName && country && (
+            <div>
+               <h2>{cityName}, {country}</h2>
+            </div>
+         )}
+
+         {/* Search*/}
          <form onSubmit={handleSearch}>
             <input
                type="text"
@@ -64,17 +109,11 @@ const Weather: React.FC = () => {
             <button type="submit">Search</button>
          </form>
 
-         {/* Loading Indicator */}
-         {loading && <div>Loading...</div>}
 
-         {/* City Name and Country */}
-         {cityName && country && (
-            <div>
-               <h2>{cityName}, {country}</h2>
-            </div>
-         )}
+         {/* TODO Better animated loading Indicator */}
 
-         {/* Current Weather */}
+
+         {/* Current*/}
          {currentWeather && (
             <div>
                <h2>Current Weather</h2>
@@ -89,16 +128,18 @@ const Weather: React.FC = () => {
             </div>
          )}
 
-         {/* Forecast Weather */}
+         {/* Forecast*/}
          {forecastWeather && (
             <div>
                <h2>5-Day Forecast</h2>
-               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '20px' }}>
-                  {forecastWeather.list.map((item: any, index: number) => (
+               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '20px' }}>
+                  {filterForecastData().map((item: any, index: number) => (
                      <div key={index} style={{ border: '1px solid #ccc', padding: '10px' }}>
-                        <p>Date: {new Date(item.dt * 1000).toLocaleDateString()}</p>
-                        <p>Temperature: {item.main.temp}°C</p>
-                        <p>Description: {item.weather[0].description}</p>
+                        <p> {item.dayOfWeek}</p>
+                        <small>{item.date}</small>
+                        <p>Day: {item.dayTemp}°C</p>
+                        <p>Night: {item.nightTemp}°C</p>
+                        <p>Sky status: {item.description}</p>
                      </div>
                   ))}
                </div>

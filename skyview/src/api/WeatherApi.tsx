@@ -1,4 +1,4 @@
-const API_KEY = '1be351574c46ebb2e24c6200b15c6441';
+export const API_KEY = '1be351574c46ebb2e24c6200b15c6441';
 
 export const fetchCurrentWeather = async (lat: number, lon: number) => {
    const response = await fetch(
