@@ -12,6 +12,8 @@ const Weather: React.FC = () => {
    const [loading, setLoading] = useState<boolean>(false);
    const [cityName, setCityName] = useState<string>('');
    const [country, setCountry] = useState<string>('');
+   const [weatherIcons, setWeatherIcons] = useState<{ [key: string]: string }>({});
+
    const { latitude, longitude, error } = useGeolocation();
 
    useEffect(() => {
@@ -19,6 +21,14 @@ const Weather: React.FC = () => {
          fetchWeatherData(latitude, longitude);
       }
    }, [latitude, longitude]);
+
+   useEffect(() => {
+      if (forecastWeather) {
+         fetchWeatherIcons();
+      }
+   }, [forecastWeather]);
+
+
 
    const fetchWeatherData = async (lat: number, lon: number) => {
       setLoading(true);
@@ -29,10 +39,31 @@ const Weather: React.FC = () => {
          setForecastWeather(forecast);
          setCityName(current.name);
          setCountry(current.sys.country);
+
+         /* const iconCode: string = current.weather[0].icon;
+         const iconUrl: string = `http://openweathermap.org/img/wn/${iconCode}.png`;
+
+         setWeatherIconUrl(iconUrl); */
+
       } catch (error) {
-         console.error('Error fetching weather data:', error);
+         console.error('Error fetching current weather:', error);
       } finally {
          setLoading(false);
+      }
+   };
+
+   /*weather icons*/
+   const fetchWeatherIcons = async () => {
+      const icons: { [key: string]: string } = {};
+      try {
+         forecastWeather.list.forEach((item: any) => {
+            const iconCode = item.weather[0].icon;
+            const iconUrl = `http://openweathermap.org/img/wn/${iconCode}.png`;
+            icons[iconCode] = iconUrl;
+         });
+         setWeatherIcons(icons);
+      } catch (error) {
+         console.error('Error fetching weather icons:', error);
       }
    };
 
@@ -67,6 +98,7 @@ const Weather: React.FC = () => {
          const date = new Date(item.dt * 1000);
          const dayOfWeek = date.toLocaleDateString(undefined, { weekday: 'long' });
 
+
          const existingDay = filteredData.find((data) => data.date === date.toLocaleDateString());
          if (existingDay) {
             existingDay.dayTemp = Math.max(existingDay.dayTemp, item.main.temp_max);
@@ -78,6 +110,7 @@ const Weather: React.FC = () => {
                dayTemp: item.main.temp_max,
                nightTemp: item.main.temp_min,
                description: item.weather[0].description,
+               icon: weatherIcons[item.weather[0].icon],
             });
          }
       });
@@ -128,13 +161,18 @@ const Weather: React.FC = () => {
             </div>
          )}
 
+
          {/* Forecast*/}
+
          {forecastWeather && (
             <div>
                <h2>5-Day Forecast</h2>
                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '20px' }}>
                   {filterForecastData().map((item: any, index: number) => (
                      <div key={index} style={{ border: '1px solid #ccc', padding: '10px' }}>
+
+                        {item.icon && <img src={item.icon} alt="Weather Icon" />}
+
                         <p> {item.dayOfWeek}</p>
                         <small>{item.date}</small>
                         <p>Day: {item.dayTemp}°C</p>
