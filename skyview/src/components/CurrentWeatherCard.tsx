@@ -36,25 +36,23 @@ const CurrentWeatherCard: React.FC<{ currentWeather: any, weatherIcons: { [key: 
                padding: '25px',
                borderRadius: '8px',
                display: 'flex',
+               alignItems: 'center',
                flexDirection: 'column',
-               gap: '10px'
             }}>
+               <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01d.png`} altText="Sunrise" />
+
                <div className='sunrise' style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-                  <p>Sunrise</p>
-
-                  <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01d.png`} altText="Sunrise" />
-                  <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', fontSize: '32px' }}>{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
+                  Sunrise
+                  <p style={{ width: '100%', display: 'flex', fontSize: '32px' }}>{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
                </div>
-
                <div className='sunset' style={{ width: '100%', display: 'flex', alignItems: 'center' }}>
-                  <p>Sunset</p>
-
-                  <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01n.png`} altText="Sunset" />
-                  <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', fontSize: '32px' }}>{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </div>
+                  Sunset <p style={{ width: '100%', fontSize: '32px' }}>{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
                </div>
+               <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01n.png`} altText="Sunset" />
             </div>
+
          </div>
       </div>
    );
