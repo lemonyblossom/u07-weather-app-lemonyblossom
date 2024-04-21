@@ -1,11 +1,9 @@
-
 import React, { useState, useEffect } from 'react';
 import useGeolocation from '../hooks/useGeolocation';
 import { fetchCurrentWeather, fetchForecastWeather, API_KEY } from '../api/WeatherApi';
+import CurrentWeatherCard from './CurrentWeatherCard';
+import ForecastCard from './ForecastCard';
 
-
-
-//FC = functional component. Takes in props well, but not atm.
 const Weather: React.FC = () => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
    const [forecastWeather, setForecastWeather] = useState<any>(null);
@@ -29,8 +27,6 @@ const Weather: React.FC = () => {
       }
    }, [forecastWeather]);
 
-
-
    const fetchWeatherData = async (lat: number, lon: number) => {
       setLoading(true);
       try {
@@ -40,12 +36,6 @@ const Weather: React.FC = () => {
          setForecastWeather(forecast);
          setCityName(current.name);
          setCountry(current.sys.country);
-
-         /* const iconCode: string = current.weather[0].icon;
-         const iconUrl: string = `http://openweathermap.org/img/wn/${iconCode}.png`;
-
-         setWeatherIconUrl(iconUrl); */
-
       } catch (error) {
          console.error('Error fetching current weather:', error);
       } finally {
@@ -53,7 +43,6 @@ const Weather: React.FC = () => {
       }
    };
 
-   /*weather icons*/
    const fetchWeatherIcons = async () => {
       const icons: { [key: string]: string } = {};
       try {
@@ -68,7 +57,6 @@ const Weather: React.FC = () => {
       }
    };
 
-   // search
    const handleSearch = async () => {
       setLoading(true);
       try {
@@ -88,59 +76,9 @@ const Weather: React.FC = () => {
       }
    };
 
-   //filter- calc temperature for day and night, and set weekday on correct date.
-   const filterForecastData = () => {
-      if (!forecastWeather) return [];
-
-      const filteredData: any[] = [];
-
-      // loop through forecast results
-      forecastWeather.list.forEach((item: any) => {
-         const date = new Date(item.dt * 1000);
-         const dayOfWeek = date.toLocaleDateString(undefined, { weekday: 'long' });
-
-
-         const existingDay = filteredData.find((data) => data.date === date.toLocaleDateString());
-         if (existingDay) {
-            existingDay.dayTemp = Math.max(existingDay.dayTemp, item.main.temp_max);
-            existingDay.nightTemp = Math.min(existingDay.nightTemp, item.main.temp_min);
-            existingDay.rawData.push({
-               timestamp: item.dt_txt,
-               temperature: item.main.temp,
-            });
-         } else {
-            filteredData.push({
-               date: date.toLocaleDateString(),
-               dayOfWeek: dayOfWeek,
-               dayTemp: item.main.temp_max,
-               nightTemp: item.main.temp_min,
-               description: item.weather[0].description,
-               icon: weatherIcons[item.weather[0].icon],
-               rawData: [{
-                  timestamp: item.dt_txt,
-                  temperature: item.main.temp,
-               }],
-            });
-         }
-      });
-      return filteredData;
-   };
-
-   {/*------------DISPLAY----------*/ }
    return (
       <div>
-         {/* TODO: Geolocation Error Handling */}
-
-
-
-         {/* City/Country */}
-         {cityName && country && (
-            <div>
-               <h2>{cityName}, {country}</h2>
-            </div>
-         )}
-
-         {/* Search*/}
+         {cityName && country && <h2>{cityName}, {country}</h2>}
          <form onSubmit={handleSearch}>
             <input
                type="text"
@@ -150,71 +88,8 @@ const Weather: React.FC = () => {
             />
             <button type="submit">Search</button>
          </form>
-
-
-         {/* TODO Better animated loading Indicator */}
-
-         {/*---------------DISPLAY-------------*/}
-         {/* Current*/}
-         {currentWeather && (
-            <div>
-               <h2>Current Weather</h2>
-               <div>
-                  <p>Temperature: {Math.floor(currentWeather.main.temp)}°C</p>
-                  <p>Feels like: {Math.floor(currentWeather.main.feels_like)}°C</p>
-                  <p>Humidity: {currentWeather.main.humidity}%</p>
-                  <p>Sunrise: {new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString()}</p>
-                  <p>Sunset: {new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString()}</p>
-                  <p>Sky status: {currentWeather.weather[0].description}</p>
-               </div>
-            </div>
-         )}
-
-
-         {/* Forecast*/}
-
-         {forecastWeather && (
-            <div>
-               <h2>5-Day Forecast</h2>
-               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '20px' }}>
-                  {filterForecastData().map((item: any, index: number) => (
-                     <div key={index} style={{ border: '1px solid #ccc', padding: '10px' }}>
-
-                        {item.icon && <img src={item.icon} alt="Weather Icon" />}
-
-                        <p> {item.dayOfWeek}</p>
-                        <small>{item.date}</small>
-                        <p>Day: {Math.floor(item.dayTemp)}°C</p>
-                        <p>Night: {Math.floor(item.nightTemp)}°C</p>
-
-                        <div style={{ marginTop: '10px' }}>
-                           <h4>Time and temp:</h4>
-                           <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
-                              {item.rawData.map((data: any, dataIndex: number) => {
-                                 const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                                 return (
-                                    <li
-                                       key={dataIndex}
-                                       style={{
-                                          backgroundColor: 'lightblue',
-                                          padding: '5px',
-                                          marginBottom: '5px',
-                                          borderRadius: '5px'
-                                       }}
-                                    >
-                                       {/*  <small>Time and temp:</small> */}  <small>{time}</small> <br></br>  <strong>{Math.floor(data.temperature)}°C</strong>
-                                    </li>
-                                 );
-                              })}
-                           </ul>
-                        </div>
-
-                        <p>Sky status: {item.description}</p>
-                     </div>
-                  ))}
-               </div>
-            </div>
-         )}
+         {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} />}
+         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} />}
       </div>
    );
 };
