@@ -88,7 +88,7 @@ const Weather: React.FC = () => {
       }
    };
 
-   //filter- calculate temp for day and night.
+   //filter- calc temperature for day and night, and set weekday on correct date.
    const filterForecastData = () => {
       if (!forecastWeather) return [];
 
@@ -104,6 +104,10 @@ const Weather: React.FC = () => {
          if (existingDay) {
             existingDay.dayTemp = Math.max(existingDay.dayTemp, item.main.temp_max);
             existingDay.nightTemp = Math.min(existingDay.nightTemp, item.main.temp_min);
+            existingDay.rawData.push({
+               timestamp: item.dt_txt,
+               temperature: item.main.temp,
+            });
          } else {
             filteredData.push({
                date: date.toLocaleDateString(),
@@ -112,6 +116,10 @@ const Weather: React.FC = () => {
                nightTemp: item.main.temp_min,
                description: item.weather[0].description,
                icon: weatherIcons[item.weather[0].icon],
+               rawData: [{
+                  timestamp: item.dt_txt,
+                  temperature: item.main.temp,
+               }],
             });
          }
       });
@@ -157,7 +165,7 @@ const Weather: React.FC = () => {
                   <p>Humidity: {currentWeather.main.humidity}%</p>
                   <p>Sunrise: {new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString()}</p>
                   <p>Sunset: {new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString()}</p>
-                  <p>Description: {currentWeather.weather[0].description}</p>
+                  <p>Sky status: {currentWeather.weather[0].description}</p>
                </div>
             </div>
          )}
@@ -176,8 +184,31 @@ const Weather: React.FC = () => {
 
                         <p> {item.dayOfWeek}</p>
                         <small>{item.date}</small>
-                        <p>Day: {item.dayTemp}°C</p>
-                        <p>Night: {item.nightTemp}°C</p>
+                        <p>Day: {Math.floor(item.dayTemp)}°C</p>
+                        <p>Night: {Math.floor(item.nightTemp)}°C</p>
+
+                        <div style={{ marginTop: '10px' }}>
+                           <h4>Time and temp:</h4>
+                           <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
+                              {item.rawData.map((data: any, dataIndex: number) => {
+                                 const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                                 return (
+                                    <li
+                                       key={dataIndex}
+                                       style={{
+                                          backgroundColor: 'lightblue',
+                                          padding: '5px',
+                                          marginBottom: '5px',
+                                          borderRadius: '5px'
+                                       }}
+                                    >
+                                       {/*  <small>Time and temp:</small> */}  <small>{time}</small> <br></br>  <strong>{Math.floor(data.temperature)}°C</strong>
+                                    </li>
+                                 );
+                              })}
+                           </ul>
+                        </div>
+
                         <p>Sky status: {item.description}</p>
                      </div>
                   ))}
