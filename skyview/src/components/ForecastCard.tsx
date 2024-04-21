@@ -1,14 +1,30 @@
 import React from 'react';
 
+
 const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: string]: string } }> = ({ forecastWeather, weatherIcons }) => {
+
+   const formatDate = (date: Date) => {
+      const day = date.getDate();
+      const suffixes = ['th', 'st', 'nd', 'rd'];
+      const suffix = day % 10 < 4 ? suffixes[day % 10] : suffixes[0];
+      return date.toLocaleDateString('en-US', { month: 'long' }) + ' ' + day + suffix;
+   };
+
    const filterForecastData = () => {
       if (!forecastWeather) return [];
 
       const filteredData: any[] = [];
 
+      //All the dates and weekdays
       forecastWeather.list.forEach((item: any) => {
          const date = new Date(item.dt * 1000);
-         const dayOfWeek = date.toLocaleDateString(undefined, { weekday: 'long' });
+         let dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
+
+         const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+         if (dayOfWeek === today) {
+            dayOfWeek = "Today";
+         }
+
 
          const existingDay = filteredData.find((data) => data.date === date.toLocaleDateString());
          if (existingDay) {
@@ -43,19 +59,18 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       <div>
          <h2>5-Day Forecast</h2>
          <div style={{ backgroundColor: 'black', padding: '5px', borderRadius: '5px', display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '20px' }}>
+
             {filterForecastData().map((item: any, index: number) => (
                <div key={index} style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '10px', padding: '10px' }}>
-
+                  <b> {item.dayOfWeek}</b>
+                  <br></br>
+                  <small>{formatDate(new Date(item.date))}</small>                  <br></br>
                   {item.icon && <img src={item.icon} alt="Weather Icon" />}
-
-                  <p> {item.dayOfWeek}</p>
-                  <small>{item.date}</small>
-                  <p>Day: {Math.floor(item.dayTemp)}°C</p>
-                  <p>Night: {Math.floor(item.nightTemp)}°C</p>
-                  <p>Sky: {item.description}</p>
+                  <br></br>
+                  <b>{Math.floor(item.dayTemp)}° / {Math.floor(item.nightTemp)}°C</b>
+                  <p>{item.description}</p>
 
                   <div style={{ marginTop: '10px' }}>
-                     <h4>Time and temp:</h4>
                      <ul style={{ listStyleType: 'none', paddingLeft: '0' }}>
                         {item.rawData.map((data: any, dataIndex: number) => {
                            const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -69,9 +84,11 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
                                     borderRadius: '5px'
                                  }}
                               >
-                                 {/*  <small>Time and temp:</small> */}
+                                 <small>{time}</small>
+                                 <br></br>
+                                 <strong>{Math.floor(data.temperature)}°C</strong>
+                                 <br></br>
                                  {data.icon && <img src={data.icon} alt="Weather Icon" />}
-                                 <small>{time}</small> <br></br>  <strong>{Math.floor(data.temperature)}°C</strong>
                               </li>
                            );
                         })}
