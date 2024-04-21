@@ -4,6 +4,7 @@ import useGeolocation from '../hooks/useGeolocation';
 import { fetchCurrentWeather, fetchForecastWeather, API_KEY } from '../api/WeatherApi';
 
 
+
 //FC = functional component. Takes in props well, but not atm.
 const Weather: React.FC = () => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
@@ -145,14 +146,14 @@ const Weather: React.FC = () => {
 
          {/* TODO Better animated loading Indicator */}
 
-
+         {/*---------------DISPLAY-------------*/}
          {/* Current*/}
          {currentWeather && (
             <div>
                <h2>Current Weather</h2>
                <div>
-                  <p>Temperature: {currentWeather.main.temp}°C</p>
-                  <p>Feels like: {currentWeather.main.feels_like}°C</p>
+                  <p>Temperature: {Math.floor(currentWeather.main.temp)}°C</p>
+                  <p>Feels like: {Math.floor(currentWeather.main.feels_like)}°C</p>
                   <p>Humidity: {currentWeather.main.humidity}%</p>
                   <p>Sunrise: {new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString()}</p>
                   <p>Sunset: {new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString()}</p>
