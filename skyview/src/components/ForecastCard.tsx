@@ -55,6 +55,9 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       return filteredData;
    };
 
+
+
+   {/*DISPLAY*/ }
    return (
       <div>
          <h2>5-Day Forecast</h2>

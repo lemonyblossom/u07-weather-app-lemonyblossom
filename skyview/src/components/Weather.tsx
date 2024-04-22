@@ -57,8 +57,6 @@ const Weather: React.FC = () => {
          console.error('Error fetching weather icons:', error);
       }
    };
-
-
    // CITY SEARCH
    const handleSearch = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -79,14 +77,12 @@ const Weather: React.FC = () => {
          }
       } catch (error) {
          console.error('Error fetching weather data for searched city:', error);
-      } finally {
-         setLoading(false);
       }
    };
 
    return (
       <div>
-         {cityName && country && <h2>{cityName}, {country}</h2>}
+         {cityName && country && <h2 >{cityName}, {country}</h2>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} />}
