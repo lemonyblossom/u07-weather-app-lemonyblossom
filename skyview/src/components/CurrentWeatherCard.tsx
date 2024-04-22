@@ -20,7 +20,7 @@ const CurrentWeatherCard: React.FC<{ currentWeather: any, weatherIcons: { [key: 
             <div className="bg-lightblue p-5 rounded">
                <div className="flex justify-center items-center">
                   {currentWeather.weather && currentWeather.weather[0].icon && (
-                     <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" />
+                     <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
                   )}
                   <strong className="ml-4 text-4xl">{Math.floor(currentWeather.main.temp)}°C</strong>
                </div>
@@ -32,7 +32,7 @@ const CurrentWeatherCard: React.FC<{ currentWeather: any, weatherIcons: { [key: 
                <p>{currentWeather.main.humidity}%</p>
             </div>
 
-            <div className="bg-lightpink p-5 rounded flex flex-col items-center justify-center">
+            <div className="p-5 rounded flex flex-col items-center justify-center">
                <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01d.png`} altText="Sunrise" />
                <div className="flex items-center mt-2">
                   Sunrise

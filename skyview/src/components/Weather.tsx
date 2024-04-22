@@ -82,10 +82,13 @@ const Weather: React.FC = () => {
 
    return (
       <div>
-         {cityName && country && <h2 >{cityName}, {country}</h2>}
+         {cityName && country && <p className='text-xl m-4 flex justify-center'> {cityName}, {country}</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} />}
+         {cityName && country && <h2 className='text-xl m-4'> 5-day forecast for {cityName}, {country}</h2>}
+
+
          {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} />}
       </div>
    );
