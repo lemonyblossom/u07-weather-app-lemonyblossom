@@ -1,4 +1,6 @@
 import React from 'react';
+import { Line } from 'react-chartjs-2';
+
 
 const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: string]: string } }> = ({ forecastWeather, weatherIcons }) => {
 
@@ -9,10 +11,15 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       return date.toLocaleDateString('en-US', { month: 'long' }) + ' ' + day + suffix;
    };
 
+   //lineChart
+
+
    const filterForecastData = () => {
       if (!forecastWeather) return [];
 
       const filteredData: any[] = [];
+
+
 
       forecastWeather.list.forEach((item: any) => {
          const date = new Date(item.dt * 1000);
@@ -58,7 +65,7 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       <div>
 
          {filterForecastData().map((item: any, index: number) => (
-            <div key={index} className="flex flex-row justify-between bg-white border rounded-lg p-4 m-2">
+            <div key={index} className="flex flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-4 m-2">
                <div className="flex flex-col justify-center mb-2">
                   <div>
                      <b>{item.dayOfWeek}</b>

@@ -11,11 +11,11 @@ const CurrentWeatherCard: React.FC<{ currentWeather: any, weatherIcons: { [key: 
 
    {/*DISPLAY*/ }
    return (
-      <div className="bg-blue-200 p-5 rounded-lg">
+      <div className="bg-blue-200 p-5 rounded-lg m-2">
          {/* Display weekday and date */}
          <h2 className="text-2xl mb-5">{formattedDate}</h2>
 
-         <div className="bg-white p-5 rounded grid grid-cols-3 gap-6">
+         <div className="bg-white dark:bg-slate-800 p-5 rounded grid grid-cols-3 gap-6">
 
             <div className="bg-lightblue p-5 rounded">
                <div className="flex justify-center items-center">
