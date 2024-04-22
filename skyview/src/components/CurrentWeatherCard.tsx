@@ -7,12 +7,15 @@ const CurrentWeatherCard: React.FC<{ currentWeather: any, weatherIcons: { [key: 
    const today = new Date();
    const formattedDate = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
+
+
+   {/*DISPLAY*/ }
    return (
       <div className="bg-yellow-400 p-5 rounded-lg">
          {/* Display weekday and date */}
          <h2 className="text-2xl mb-5">{formattedDate}</h2>
 
-         <div className="bg-black p-5 rounded grid grid-cols-3 gap-6">
+         <div className="bg-white p-5 rounded grid grid-cols-3 gap-6">
 
             <div className="bg-lightblue p-5 rounded">
                <div className="flex justify-center items-center">
