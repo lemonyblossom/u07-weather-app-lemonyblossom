@@ -9,14 +9,14 @@ interface SearchProps {
 const Search: React.FC<SearchProps> = ({ searchCity, setSearchCity, handleSearch }) => {
 
    return (
-      <form onSubmit={handleSearch}>
-         <input
+      <form onSubmit={handleSearch} className="flex justify-center m-2">
+         <input className="border border-blue-200 p-2 rounded"
             type="text"
             value={searchCity}
             onChange={(e) => setSearchCity(e.target.value)}
             placeholder="Enter city name"
          />
-         <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+         <button type="submit" className="ml-2 bg-blue-500 text-white px-3 py-0 rounded">
             Search
          </button>
       </form>
