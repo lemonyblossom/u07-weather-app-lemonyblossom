@@ -5,10 +5,14 @@ import CurrentWeatherCard from './CurrentWeatherCard';
 import ForecastCard from './ForecastCard';
 import Search from './Search';
 
-const Weather: React.FC = () => {
+interface WeatherProps {
+   tempUnit: 'celsius' | 'fahrenheit';
+}
+
+const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
    const [forecastWeather, setForecastWeather] = useState<any>(null);
-   const [searchCity, setSearchCity] = useState<string>('');//TODO: remake method
+   const [searchCity, setSearchCity] = useState<string>('');
    const [loading, setLoading] = useState<boolean>(false);
    const [cityName, setCityName] = useState<string>('');
    const [country, setCountry] = useState<string>('');
@@ -57,11 +61,29 @@ const Weather: React.FC = () => {
          console.error('Error fetching weather icons:', error);
       }
    };
+
+   // Convert Celsius to Fahrenheit
+   const celsiusToFahrenheit = (celsius: number) => {
+      return (celsius * 9) / 5 + 32;
+   };
+
+   // Convert Fahrenheit to Celsius
+   const fahrenheitToCelsius = (fahrenheit: number) => {
+      return ((fahrenheit - 32) * 5) / 9;
+   };
+
+   // Function to decide which conversion function to use
+   const convertTemperature = (temp: number) => {
+      if (tempUnit === 'celsius') {
+         return temp;
+      }
+      return celsiusToFahrenheit(temp);
+   };
+
    // CITY SEARCH
    const handleSearch = async (e: React.FormEvent) => {
       e.preventDefault();
       setLoading(true);
-
 
       try {
          if (searchCity) {
@@ -85,11 +107,9 @@ const Weather: React.FC = () => {
          {cityName && country && <p className='text-xl m-4 flex justify-center'> {cityName}, {country}</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
-         {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} />}
+         {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
          {cityName && country && <h2 className='text-xl m-4'> 5-day forecast for {cityName}, {country}</h2>}
-
-
-         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} />}
+         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={tempUnit === 'celsius' ? celsiusToFahrenheit : fahrenheitToCelsius} />}
       </div>
    );
 };

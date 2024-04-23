@@ -1,8 +1,14 @@
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 
+interface ForecastCardProps {
+   forecastWeather: any;
+   weatherIcons: { [key: string]: string };
+   tempUnit: 'celsius' | 'fahrenheit';
+   convertTemperature: (temp: number) => number;
+}
 
-const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: string]: string } }> = ({ forecastWeather, weatherIcons }) => {
+const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIcons, tempUnit, convertTemperature }) => {
 
    const formatDate = (date: Date) => {
       const day = date.getDate();
@@ -11,46 +17,43 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       return date.toLocaleDateString('en-US', { month: 'long' }) + ' ' + day + suffix;
    };
 
-   //lineChart
-
-
    const filterForecastData = () => {
       if (!forecastWeather) return [];
 
       const filteredData: any[] = [];
 
-
-
       forecastWeather.list.forEach((item: any) => {
          const date = new Date(item.dt * 1000);
          let dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
 
-         // Skip today's forecast
-         const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-         if (dayOfWeek === today) {
+         const temperature = convertTemperature(item.main.temp);
+         const dayTemp = convertTemperature(item.main.temp_max);
+         const nightTemp = convertTemperature(item.main.temp_min);
+
+         if (dayOfWeek === new Date().toLocaleDateString('en-US', { weekday: 'long' })) {
             return;
          }
 
          const existingDay = filteredData.find((data) => data.date === date.toLocaleDateString());
          if (existingDay) {
-            existingDay.dayTemp = Math.max(existingDay.dayTemp, item.main.temp_max);
-            existingDay.nightTemp = Math.min(existingDay.nightTemp, item.main.temp_min);
+            existingDay.dayTemp = Math.max(existingDay.dayTemp, dayTemp);
+            existingDay.nightTemp = Math.min(existingDay.nightTemp, nightTemp);
             existingDay.rawData.push({
                timestamp: item.dt_txt,
-               temperature: item.main.temp,
+               temperature: temperature,
                icon: weatherIcons[item.weather[0].icon],
             });
          } else {
             filteredData.push({
                date: date.toLocaleDateString(),
                dayOfWeek: dayOfWeek,
-               dayTemp: item.main.temp_max,
-               nightTemp: item.main.temp_min,
+               dayTemp: dayTemp,
+               nightTemp: nightTemp,
                description: item.weather[0].description,
                icon: weatherIcons[item.weather[0].icon],
                rawData: [{
                   timestamp: item.dt_txt,
-                  temperature: item.main.temp,
+                  temperature: temperature,
                   icon: weatherIcons[item.weather[0].icon],
                }],
             });
@@ -60,10 +63,8 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
       return filteredData;
    };
 
-   {/*DISPLAY FORECAST*/ }
    return (
       <div>
-
          {filterForecastData().map((item: any, index: number) => (
             <div key={index} className="flex flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-4 m-2">
                <div className="flex flex-col justify-center mb-2">
@@ -74,17 +75,15 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
                   <br></br>
 
                   <div className="flex items-center">
-                     <b className="mr-4 ">{Math.floor(item.dayTemp)}°C </b>
+                     <b className="mr-4 ">{Math.floor(item.dayTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
                      /
-
-                     <b className="ml-4">{Math.floor(item.nightTemp)}°C</b>
+                     <b className="ml-4">{Math.floor(item.nightTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
                   </div>
                   <div className="weather icon-description flex flex-col items-center">
                      {item.icon && <img src={item.icon} alt="Weather Icon" className="w-20 h-20" />}
                      <p className="mb-2">{item.description}</p>
                   </div>
                </div>
-
 
                <ul className="flex gap-2 bg-lightblue p-2 rounded items-center">
                   {item.rawData.map((data: any, dataIndex: number) => {
@@ -93,7 +92,7 @@ const ForecastCard: React.FC<{ forecastWeather: any, weatherIcons: { [key: strin
                         <li key={dataIndex}>
                            <small>{time}</small>
                            <br></br>
-                           <strong className="mt-1">{Math.floor(data.temperature)}°C</strong>
+                           <strong className="mt-1">{Math.floor(data.temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
                            {data.icon && <img src={data.icon} alt="Weather Icon" className="w-8 h-8" />}
                         </li>
                      );
