@@ -15,7 +15,7 @@ function App() {
       className={
         tempUnit === 'celsius'
           ? 'bg-blue-100 text-black flex flex-col items-center justify-center min-h-screen'
-          : 'bg-darkGray flex flex-col items-center justify-center min-h-screen'
+          : 'bg-blue-100 text-black flex flex-col items-center justify-center min-h-screen'
       }
     >
       <h1 className="text-5xl mb-8 mt-4">SkyView</h1>
