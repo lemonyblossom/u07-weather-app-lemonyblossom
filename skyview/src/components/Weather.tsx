@@ -62,22 +62,13 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
       }
    };
 
-   // Convert Celsius to Fahrenheit
-   const celsiusToFahrenheit = (celsius: number) => {
-      return (celsius * 9) / 5 + 32;
-   };
-
-   // Convert Fahrenheit to Celsius
-   const fahrenheitToCelsius = (fahrenheit: number) => {
-      return ((fahrenheit - 32) * 5) / 9;
-   };
-
    // Function to decide which conversion function to use
    const convertTemperature = (temp: number) => {
       if (tempUnit === 'celsius') {
          return temp;
       }
-      return celsiusToFahrenheit(temp);
+      // Convert Celsius to Fahrenheit
+      return (temp * 9) / 5 + 32;
    };
 
    // CITY SEARCH
@@ -103,7 +94,6 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
    };
 
    return (
-
       <div>
          {loading && <p>Loading...</p>}
          {cityName && country && <p className='text-xl m-4 flex justify-center'> {cityName}, {country}</p>}
@@ -111,9 +101,7 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
          {cityName && country && <h2 className='text-xl m-4'> 5-day forecast for {cityName}, {country}</h2>}
-         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={tempUnit === 'celsius' ? celsiusToFahrenheit : fahrenheitToCelsius} />}
-
-
+         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
       </div>
    );
 };

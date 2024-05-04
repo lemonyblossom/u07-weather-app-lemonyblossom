@@ -33,6 +33,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
          const date = new Date(item.dt * 1000);
          let dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
 
+         // Convert temperatures
          const temperature = convertTemperature(item.main.temp);
          const dayTemp = convertTemperature(item.main.temp_max);
          const nightTemp = convertTemperature(item.main.temp_min);

@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Weather from './components/Weather';
 import './index.css';
 
-function App() {
-  const [count, setCount] = useState(0);
+function App(): JSX.Element {
+  const [count, setCount] = useState<number>(0);
   const [tempUnit, setTempUnit] = useState<'celsius' | 'fahrenheit'>('celsius');
 
   const toggleTempUnit = () => {
@@ -22,7 +22,7 @@ function App() {
 
       {/* Temp Unit Toggle */}
       <div className="mb-4">
-        <button onClick={toggleTempUnit} className="px-4 py-2 bg-blue-300 text-white borde-rwhite rounded">
+        <button onClick={toggleTempUnit} className="px-4 py-2 bg-blue-300 text-white border-white rounded">
           Toggle Temperature Unit ({tempUnit})
         </button>
       </div>

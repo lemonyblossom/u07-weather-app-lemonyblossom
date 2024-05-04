@@ -3,14 +3,12 @@ import WeatherIcon from './WeatherIcon';
 import mountainsGif from '../assets/mountains.gif';
 import sunrise from '../assets/sunrise.png';
 import sunset from '../assets/sunset (4).png';
-
 interface CurrentWeatherCardProps {
    currentWeather: any;
    weatherIcons: { [key: string]: string };
    tempUnit: 'celsius' | 'fahrenheit';
    convertTemperature: (temp: number) => number;
 }
-
 const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather, weatherIcons, tempUnit, convertTemperature }) => {
 
    // Get today's date
@@ -44,9 +42,6 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
             </div>
 
             {/* Sunrise and Sunset Display */}
-
-
-
             <div className="w-full h-full rounded flex flex-col items-center justify-center bg-gradient-to-l from-white via-white to-blue-200/90 border border-blue-200 ring-blue-400 ring-opacity-75">
                <div className="flex justify-end w-full m-2">
                   <img className="w-[20%]" src={mountainsGif} alt="Animated GIF" />
@@ -56,17 +51,14 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
                   <p className="m-4 text-xl">{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                   <img className="w-[10%]" src={sunrise} alt="sunrise" />
                </div>
-
                <div className="w-full p-2 rounded flex items-center justify-center bg-gradient-to-b from-red-300/10 via-orange-400/80 to-orange-500/10">
                   <p>Sunset</p>
                   <p className="m-4 text-xl">{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                   <img className="w-[10%]" src={sunset} alt="sunset" />
-
                </div>
             </div>
          </div>
       </div>
    );
 };
-
 export default CurrentWeatherCard;
