@@ -87,12 +87,12 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
       <div>
          {/*Today's Hourly Data */}
          {todayData && (
-            <div className="flex flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-4 m-2">
+            <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-2 m-1">
                <div className="w-full flex flex-col justify-center mb-2">
                   <b>Temperature today
                   </b>
                   <br />
-                  <ul className="w-full flex gap-2 bg-lightblue p-2 rounded items-center justify-between">
+                  <ul className="w-full flex gap-2 rounded items-center justify-between">
 
                      {todayData.rawData.map((data: any, dataIndex: number) => {
                         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -115,26 +115,33 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
 
          {/*forecast 5 days*/}
          {filteredData.map((item: any, index: number) => (
-            <div key={index} className="flex flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-4 m-2">
-               <div className="flex flex-col justify-center mb-2">
+            <div key={index} className="forecast-card flex flex-col md:flex-col lg:flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-2 m-1">
+
+               <div className="forecast-content flex flex-col justify-center mb-2 p-2">
                   <div>
+
                      <b>{item.dayOfWeek}</b>
                      <small className="ml-2">{formatDate(new Date(item.date))}</small>
-                  </div>
-                  <br></br>
+                     <br></br>
+                     <div className="flex justify-between">
 
-                  <div className="flex items-center">
-                     <b className="mr-4 ">{Math.floor(item.dayTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
-                     /
-                     <b className="ml-4">{Math.floor(item.nightTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
+                        <div className="flex items-center">
+
+                           <b className="mr-4 ">{Math.floor(item.dayTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
+                           /
+                           <b className="ml-4">{Math.floor(item.nightTemp)}°{tempUnit === 'celsius' ? 'C' : 'F'}</b>
+                        </div>
+                        <div className="weather icon-description flex flex-col items-center ">
+                           {item.icon && <img src={item.icon} alt="Weather Icon" className="w-10 h-10" />}
+                           <p className="mb-2">{item.description}</p>
+                        </div>
+
+                     </div>
                   </div>
-                  <div className="weather icon-description flex flex-col items-center">
-                     {item.icon && <img src={item.icon} alt="Weather Icon" className="w-20 h-20" />}
-                     <p className="mb-2">{item.description}</p>
-                  </div>
+
                </div>
 
-               <ul className="flex gap-2 bg-lightblue p-2 rounded items-center">
+               <ul className="forecast-hourly-data flex gap-2 rounded items-center">
                   {item.rawData.map((data: any, dataIndex: number) => {
                      const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                      return (

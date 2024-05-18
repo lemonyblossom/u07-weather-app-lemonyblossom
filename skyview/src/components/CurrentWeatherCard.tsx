@@ -20,18 +20,18 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
    return (
-      <div className="bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950 dark:via-blue-800/60 dark:to-purple-950/60 p-5 rounded-lg m-2">
+      <div className=" current-card bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950 dark:via-blue-800/60 dark:to-purple-950/60 p-3 rounded-lg ">
          {/* Display for weekday and date */}
          <h2 className="text-2xl mb-5">{formattedDate}</h2>
 
-         <div className="bg-gradient-to-bl from-white via-white  to-blue-300 dark:bg-slate-800 dark: rounded grid grid-cols-3 gap-6">
-            <div className="bg-lightblue p-5 rounded">
-               <div className="flex justify-center items-center">
-                  {currentWeather.weather && currentWeather.weather[0].icon && (
-                     <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
-                  )}
-                  <strong className="ml-4 text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
-               </div>
+         <div className="current-data-container bg-gradient-to-bl from-white via-white  to-blue-300 dark:bg-slate-800 dark: rounded grid grid-cols-3 gap-6">
+
+            <div className="today-temp flex flex-col items-start justify-start">
+               {currentWeather.weather && currentWeather.weather[0].icon && (
+                  <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
+               )}
+               <strong className="ml-4 text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
+
                <p className="mt-2">Feels Like: {Math.floor(feelsLike)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
             </div>
 
