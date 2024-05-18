@@ -1,6 +1,5 @@
 import React from 'react';
-/* import LineChart from './LineChart';
- */interface ForecastCardProps {
+interface ForecastCardProps {
    forecastWeather: any;
    weatherIcons: { [key: string]: string };
    tempUnit: 'celsius' | 'fahrenheit';
@@ -82,7 +81,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
    const { filteredData, todayData } = filterForecastData();
 
    return (
-      <div className='forecast-component'>
+      <div>
          {/*Today's Hourly Data */}
          {todayData && (
             <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-2 m-1">
@@ -116,7 +115,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
          {filteredData.map((item: any, index: number) => (
             <div key={index} className="forecast-card flex flex-col md:flex-col lg:flex-row justify-between bg-white dark:bg-slate-800 border rounded-lg p-2 m-1">
 
-               <div className="forecast-content flex flex-col p-2">
+               <div className="forecast-content flex flex-col p-1">
                   <b>{item.dayOfWeek}</b>
 
                   <div className='5-day-date-and-temp'>
@@ -134,7 +133,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
 
                </div>
 
-               <ul className="forecast-hourly-data mt-3 flex gap-2  items-center">
+               <ul className="forecast-hourly-data mt-3 flex gap-2 justify-center items-center">
                   {item.rawData.map((data: any, dataIndex: number) => {
                      const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                      return (

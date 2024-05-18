@@ -1,7 +1,5 @@
 import React from 'react';
 import WeatherIcon from './WeatherIcon';
-import mountainsGif from '../assets/mountains.gif';
-import windGif from '../assets/wind.gif';
 import sunrise from '../assets/sunrise.png';
 import sunset from '../assets/sunset (4).png';
 
@@ -32,7 +30,6 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
             <div className='first-section-card flex flex-row'>
 
                <div className="weather-details-container w-full lg:w-2/3 flex flex-col justify-around  md:flex-row m-2 p-5 rounded">
-
                   <div className='weather-details flex flex-col justify-center '>
                      <p>Weather: {currentWeather.weather[0].description}</p>
                      <p>Cloudiness: {currentWeather.clouds.all}%</p>
@@ -43,20 +40,17 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
                      {currentWeather.rain && currentWeather.rain['1h'] && <p>Rain (1h): {currentWeather.rain['1h']} mm</p>}
                   </div>
                </div>
-               <div className="today-temp w-full flex flex-col p-4 md:w-1/3 items-center">
+               <div className="today-temp w-full flex flex-col p-4 md:w-1/3 items-center ">
                   {currentWeather.weather && currentWeather.weather[0].icon && (
                      <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
                   )}
                   <strong className="text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
                   <p className="mt-2">Feels Like: {Math.floor(feelsLike)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
-
                </div>
-
-
-
             </div>
+
             <div className="second-section-card flex flex-row w-full lg:justify-evenly lg:w-2/3 md:mt-8 ">
-               <div className='wind-details flex flex-col justify-center w-full m-2 items-start p-5 bg-white'>
+               <div className='wind-details flex flex-col justify-center w-full m-2 items-start md:items-center p-5 bg-white'>
                   <p>Wind Speed: {currentWeather.wind.speed} m/s</p>
                   <p>Wind Direction: {currentWeather.wind.deg}°</p>
                   {currentWeather.rain && currentWeather.rain['1h'] && <p>Rain (1h): {currentWeather.rain['1h']} mm</p>}
