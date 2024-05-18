@@ -1,14 +1,17 @@
 import React from 'react';
 import WeatherIcon from './WeatherIcon';
 import mountainsGif from '../assets/mountains.gif';
+import windGif from '../assets/wind.gif';
 import sunrise from '../assets/sunrise.png';
 import sunset from '../assets/sunset (4).png';
+
 interface CurrentWeatherCardProps {
    currentWeather: any;
    weatherIcons: { [key: string]: string };
    tempUnit: 'celsius' | 'fahrenheit';
    convertTemperature: (temp: number) => number;
 }
+
 const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather, weatherIcons, tempUnit, convertTemperature }) => {
 
    // Get today's date
@@ -20,45 +23,67 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
    return (
-      <div className=" current-card bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950 dark:via-blue-800/60 dark:to-purple-950/60 p-3 rounded-lg ">
+      <div className="current-card bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950 dark:via-blue-800/60 dark:to-purple-950/60 p-2 rounded-lg ">
          {/* Display for weekday and date */}
          <h2 className="text-2xl mb-5">{formattedDate}</h2>
 
-         <div className="current-data-container bg-gradient-to-bl from-white via-white  to-blue-300 dark:bg-slate-800 dark: rounded grid grid-cols-3 gap-6">
+         <div className="current-data-container flex flex-col bg-gradient-to-bl from-white via-white to-blue-300 dark:bg-slate-800 dark:rounded">
 
-            <div className="today-temp flex flex-col items-start justify-start">
-               {currentWeather.weather && currentWeather.weather[0].icon && (
-                  <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
-               )}
-               <strong className="ml-4 text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
+            <div className='first-section-card flex flex-row'>
 
-               <p className="mt-2">Feels Like: {Math.floor(feelsLike)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
+               <div className="weather-details-container w-full lg:w-2/3 flex flex-col justify-around  md:flex-row m-2 p-5 rounded">
+
+                  <div className='weather-details flex flex-col justify-center '>
+                     <p>Weather: {currentWeather.weather[0].description}</p>
+                     <p>Cloudiness: {currentWeather.clouds.all}%</p>
+                  </div>
+                  <div className='weather-details flex flex-col justify-center '>
+                     <p>Humidity: {currentWeather.main.humidity}%</p>
+                     <p>Pressure: {currentWeather.main.pressure} hPa</p>
+                     {currentWeather.rain && currentWeather.rain['1h'] && <p>Rain (1h): {currentWeather.rain['1h']} mm</p>}
+                  </div>
+               </div>
+               <div className="today-temp w-full flex flex-col p-4 md:w-1/3 items-center">
+                  {currentWeather.weather && currentWeather.weather[0].icon && (
+                     <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
+                  )}
+                  <strong className="text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
+                  <p className="mt-2">Feels Like: {Math.floor(feelsLike)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
+
+               </div>
+
+
+
             </div>
+            <div className="second-section-card flex flex-row w-full lg:justify-evenly lg:w-2/3 md:mt-8 ">
+               <div className='wind-details flex flex-col justify-center w-full m-2 items-start p-5 bg-white'>
+                  <p>Wind Speed: {currentWeather.wind.speed} m/s</p>
+                  <p>Wind Direction: {currentWeather.wind.deg}°</p>
+                  {currentWeather.rain && currentWeather.rain['1h'] && <p>Rain (1h): {currentWeather.rain['1h']} mm</p>}
+               </div>
+               <div className="sun-position-data w-full m-2 bg-pink-200">
+                  <div className="sunrise w-full rounded flex justify-center items-center">
+                     <img className="w-8 m-2" src={sunrise} alt="sunrise" />
+                     <p>Sunrise</p>
+                     <p className="m-4 text-xl">{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
+                  <div className="sunset w-full rounded flex justify-center items-center">
+                     <img className="w-8 m-2" src={sunset} alt="sunset" />
+                     <p>Sunset</p>
+                     <p className="m-4 text-xl">{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  </div>
+               </div>
 
-            {/* Humidity Display */}
-            <div className="bg-lightgreen p-5 rounded">
-               <h3 className="mb-2">Humidity</h3>
-               <p>{currentWeather.main.humidity}%</p>
-            </div>
-
-            {/* Sunrise and Sunset Display */}
-            <div className="w-full h-full rounded flex flex-col items-center justify-center bg-gradient-to-l from-white via-white to-blue-200/90 border border-blue-200 ring-blue-400 ring-opacity-75">
-               <div className="flex justify-end w-full m-2">
-                  <img className="w-[20%]" src={mountainsGif} alt="Animated GIF" />
-               </div>
-               <div className="w-full p-2 rounded flex items-center justify-center bg-gradient-to-b from-blue-100/0 via-red-100/90 to-red-200/10">
-                  <p>Sunrise</p>
-                  <p className="m-4 text-xl">{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                  <img className="w-[10%]" src={sunrise} alt="sunrise" />
-               </div>
-               <div className="w-full p-2 rounded flex items-center justify-center bg-gradient-to-b from-red-300/10 via-orange-400/80 to-orange-500/10">
-                  <p>Sunset</p>
-                  <p className="m-4 text-xl">{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
-                  <img className="w-[10%]" src={sunset} alt="sunset" />
-               </div>
+               {/*  <div className="sun-animation flex justify-end">
+                     <img className="w-20 h-16" src={mountainsGif} alt="Animation of sun rising and setting" />
+                  </div>
+                  <div className="wind-animation flex justify-end">
+                     <img className="w-20 h-16" src={windGif} alt="Umbrella and leafs blowing in the wind" />
+                  </div> */}
             </div>
          </div>
       </div>
    );
 };
+
 export default CurrentWeatherCard;

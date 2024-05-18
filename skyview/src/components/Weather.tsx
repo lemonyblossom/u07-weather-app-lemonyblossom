@@ -96,11 +96,11 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
    return (
       <div>
          {loading && <p>Loading...</p>}
-         {cityName && country && <p className='text-xl m-4 flex justify-center'> {cityName}, {country}</p>}
+         {cityName && country && <p className='text-xl m-2 flex justify-center'> {cityName}, {country}</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
-         {cityName && country && <h2 className='text-xl m-4'> 5-day forecast for {cityName}, {country}</h2>}
+         {cityName && country && <h2 className='text-xl m-2'> {cityName}, {country}</h2>}
          {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
       </div>
    );
