@@ -7,9 +7,10 @@ import Search from './Search';
 
 interface WeatherProps {
    tempUnit: 'celsius' | 'fahrenheit';
+   toggleTempUnit: () => void;
 }
 
-const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
+const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
    const [forecastWeather, setForecastWeather] = useState<any>(null);
    const [searchCity, setSearchCity] = useState<string>('');
@@ -62,16 +63,13 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
       }
    };
 
-   // Function to decide which conversion function to use
    const convertTemperature = (temp: number) => {
       if (tempUnit === 'celsius') {
          return temp;
       }
-      // Convert Celsius to Fahrenheit
       return (temp * 9) / 5 + 32;
    };
 
-   // CITY SEARCH
    const handleSearch = async (e: React.FormEvent) => {
       e.preventDefault();
       setLoading(true);
@@ -95,13 +93,23 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
 
    return (
       <div>
-         {loading && <p>Loading...</p>}
-         {cityName && country && <p className='text-xl m-2 flex justify-center'> {cityName}, {country}</p>}
+         {loading && <p className="text-center text-xl text-white font-medium">Loading...</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
+         {cityName && country && <p className='text-2xl font-bold m-2 flex justify-start'> {cityName}, {country}</p>}
+
+         {currentWeather && forecastWeather && (
+            <div className=" toggleUnit mb-2 flex justify-end">
+               <button
+                  onClick={toggleTempUnit}
+                  className="ml-2 bg-gradient-to-t from-blue-400 to-blue-100  text-xl text-blue-900 font-medium border-0 border-blue-100 shadow-lg px-3 py-2 rounded-lg dark:bg-gradient-to-b dark:from-blue-950/80 dark:to-blue-900 dark:text-blue-200">
+                  Unit ({tempUnit})
+               </button>
+            </div>
+         )}
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
-         {cityName && country && <h2 className='text-xl m-2'> {cityName}, {country}</h2>}
-         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
+         {/*          {cityName && country && <h2 className='text-xl m-2'> {cityName}, {country}</h2>}
+ */}         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
       </div>
    );
 };
