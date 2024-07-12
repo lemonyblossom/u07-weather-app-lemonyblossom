@@ -20,18 +20,27 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
    const temperature = convertTemperature(currentWeather.main.temp);
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
-   // CAlculate Sun position
-   const sunrise = currentWeather.sys.sunrise * 1000;
-   const sunset = currentWeather.sys.sunset * 1000;
+   // CAlculate Sun position times
+   /*  const sunrise = currentWeather.sys.sunrise * 1000;
+    const sunset= currentWeather.sys.sunset * 1000; */
+   const sunriseTime = new Date(currentWeather.sys.sunrise * 1000);
+   const sunsetTime = new Date(currentWeather.sys.sunset * 1000);
+
+
+
+   //Calculate sun position for progressbar
    const now = Date.now();
+   const sunPosition = ((now - sunriseTime.getTime()) / (sunsetTime.getTime() - sunriseTime.getTime())) * 100;
 
-   const calculateSunPosition = (currentTime: number, sunriseTime: number, sunsetTime: number) => {
-      if (currentTime < sunriseTime) return 0;
-      if (currentTime > sunsetTime) return 100;
-      return ((currentTime - sunriseTime) / (sunsetTime - sunriseTime)) * 100;
-   };
 
-   const sunPosition = calculateSunPosition(now, sunrise, sunset);
+   /*  const calculateSunPosition = (currentTime: number, sunriseTime: number, sunsetTime: number) => {
+       if (currentTime < sunriseTime) return 0;
+       if (currentTime > sunsetTime) return 100;
+       return ((currentTime - sunriseTime) / (sunsetTime - sunriseTime)) * 100;
+    };
+ 
+    const sunPosition = calculateSunPosition(now, sunrise, sunset);
+  */
 
 
    return (
@@ -85,13 +94,60 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather,
                      <p className="m-1">{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
                      <img className="w-8" src={sunset} alt="sunset" />
                   </div>
-                  <div className="sunProgress relative w-full h-5 bg-gray-300 rounded-lg overflow-hidden mt-2">
+
+                  {/*  <div className="sunProgress relative w-full h-5 bg-gray-300 rounded-lg overflow-hidden mt-2">
                      <div className="relative h-full" style={{ background: `linear-gradient(90deg, #ffec8c ${sunPosition}%, #b6caf0 ${sunPosition}%)` }}>
                         <div className="absolute -top-3 h-5 w-5" style={{ left: `${sunPosition}%`, transform: 'translateX(-50%) translateY(60%)' }}>
                            <img src={sunIcon} alt="Sun Position" className="h-full w-full" />
                         </div>
                      </div>
+                  </div> */}
+
+                  {/* Circular Progress Bar */}
+                  <div className="sun-progress relative mt-2 w-24 h-24">
+                     <svg className="absolute" width="100%" height="100%" viewBox="0 0 100 100">
+
+
+                        {/* Blue outer circle with gap */}
+                        <circle
+                           cx="50"
+                           cy="50"
+                           r="40"
+                           fill="none"
+                           strokeWidth="6"
+                           stroke="#b6caf0"
+                           strokeDasharray="251.2" // Adjust value to create a gap
+                           transform="rotate(93 50 50)" // Rotate to start from the bottom
+                        />
+                        {/* progress circle*/}
+                        <circle
+                           cx="50"
+                           cy="50"
+                           r="40"
+                           fill="none"
+                           strokeWidth="9"
+                           stroke="#ffec8c"
+                           strokeLinecap="round"
+                           strokeDasharray="251.2"
+                           strokeDashoffset={251.2 - (251.2 * sunPosition) / 100}
+                           transform="rotate(93 50 50)" // Rotate to start from the bottom
+                        />
+                     </svg>
+
+                     <img
+                        className="absolute w-5 h-5 object-cover"
+                        src={sunIcon}
+                        alt="Sun Position"
+                        style={{
+                           top: '50%',
+                           left: '50%',
+                           transform: `rotate(${(360 * sunPosition) / 100}deg) translate(30%, 200%)`,
+                           transformOrigin: 'center center',
+                        }}
+                     />
+
                   </div>
+
                </div>
             </div>
          </div>
