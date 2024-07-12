@@ -96,13 +96,13 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
          {loading && <p className="text-center text-xl text-white font-medium">Loading...</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
-         {cityName && country && <p className='text-2xl font-bold m-2 flex justify-start'> {cityName}, {country}</p>}
+         {cityName && country && <p className='cityNameDisplay px-2 text-3xl font-bold mt-5 flex justify-start dark:text-blue-200'> {cityName}, {country}</p>}
 
          {currentWeather && forecastWeather && (
             <div className=" toggleUnit mb-2 flex justify-end">
                <button
                   onClick={toggleTempUnit}
-                  className="ml-2 bg-gradient-to-t from-blue-400 to-blue-100  text-xl text-blue-900 font-medium border-0 border-blue-100 shadow-lg px-3 py-2 rounded-lg dark:bg-gradient-to-b dark:from-blue-950/80 dark:to-blue-900 dark:text-blue-200">
+                  className="ml-2 bg-gradient-to-t from-blue-400 to-blue-100  text-xl text-white font-medium border-1 border-blue-300 shadow-lg px-3 py-2 rounded-lg dark:bg-gradient-to-b dark:from-blue-950/80 dark:to-blue-900 dark:text-blue-200 dark:border-blue-700">
                   Unit ({tempUnit})
                </button>
             </div>

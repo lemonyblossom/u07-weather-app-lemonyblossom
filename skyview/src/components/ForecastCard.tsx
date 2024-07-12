@@ -84,12 +84,12 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
       <div>
          {/*Today's Hourly Data */}
          {todayData && (
-            <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-white bg-opacity-75  border-1 border-blue-300 shadow-lg rounded-lg p-2 m-1">
-               <div className="w-full flex flex-col justify-center">
-                  <b>Temps until midnight
+            <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-gradient-to-tr from-blue-200 via-blue-100 to-blue-200 shadow-lg rounded-b-lg rounded-t-none p-2">
+               <div className="w-full flex flex-col justify-center md:flex-row">
+                  <b className='w-1/2 px-2'>Temps until midnight
                   </b>
                   <br />
-                  <ul className="temp-for-the-rest-of-the-day w-full flex rounded items-center justify-around">
+                  <ul className="temp-for-the-rest-of-the-day w-full flex rounded items-start justify-around">
 
                      {todayData.rawData.map((data: any, dataIndex: number) => {
                         const time = new Date(data.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -107,15 +107,12 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
             </div>
          )}
 
-         {/*          {todayData && <LineChart todayData={todayData.rawData} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
- */}
-
          {/*forecast 5 days*/}
-         <h3 className='m-2'>5-day forecast</h3>
+         <h3 className='m-2 dark:text-blue-100 font-medium'>5-day forecast</h3>
          <div className="forecast-grid grid grid-cols-1 lg:grid-cols-2 gap-4">
             {filteredData.map((item: any, index: number) => (
-               <div key={index} className="forecast-card flex flex-col justify-between bg-white bg-opacity-75  border-1 border-blue-300 shadow-lg rounded-lg p-2 m-1">
-                  <div className="forecast-content flex flex-col w-full p-1">
+               <div key={index} className="forecast-card flex flex-col bg-gradient-to-tr from-blue-200 via-blue-100 to-blue-200 border-1 border-blue-300 shadow-lg  rounded-lg px-4 py-2 m-1  lg:items-center lg:p-5">
+                  <div className="forecast-content flex flex-col w-full lg:w-3/4  p-1">
                      <b>{item.dayOfWeek}</b>
                      <div className='5-day-date-and-temp flex flex-row justify-between'>
                         <small>{formatDate(new Date(item.date))}</small>

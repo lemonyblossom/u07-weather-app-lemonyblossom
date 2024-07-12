@@ -11,14 +11,14 @@ function App(): JSX.Element {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden text-blue-900 dark:text-purple-900 ">
+    <div className="relative h-screen w-screen overflow-hidden text-blue-900 ">
       {/* Gradient Background */}
-      <div className="fixed inset-0 bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950 dark:via-blue-700/60 dark:to-purple-950/60 z-0"></div>
+      <div className="fixed inset-0 bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950  dark:to-blue-500/70 z-0"></div>
 
       {/* Content */}
       <div className="relative h-full w-full overflow-y-auto z-10">
         <div className="flex flex-col items-center justify-center min-h-screen md:max-w-screen-md lg:max-w-screen-lg mx-auto px-2">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-6 md:mb-8 mt-2 sm:mt-4 md:mt-6 text-center">
+          <h1 className="text-3xl mb-4 pt-5 sm:text-4xl md:text-5xl lg:text-6xl sm:mb-6 md:mb-8 mt-2 sm:mt-4 md:mt-6 text-center dark:text-blue-200">
             SkyView
           </h1>
 

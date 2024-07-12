@@ -10,7 +10,7 @@ const Search: React.FC<SearchProps> = ({ searchCity, setSearchCity, handleSearch
 
    return (
       <form onSubmit={handleSearch} className="flex justify-center m-2">
-         <input className="border border-blue-200 p-2 rounded-lg dark:bg-blue-950/70 dark:border-blue-800 dark:text-red-200"
+         <input className="border border-blue-200 p-2 rounded-lg dark:bg-blue-950/70 dark:border-blue-800 dark:text-blue-100"
             type="text"
             value={searchCity}
             onChange={(e) => setSearchCity(e.target.value)}
