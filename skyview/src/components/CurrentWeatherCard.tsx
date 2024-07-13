@@ -1,7 +1,7 @@
 import React from 'react';
 import WeatherIcon from './WeatherIcon';
-import sunrise from '../assets/sunrise.png';
-import sunset from '../assets/sunset (4).png';
+import sunrise from '../assets/sunriseIcon.png';
+import sunset from '../assets/sunsetIcon.png';
 import sunIcon from '../assets/sun-position.png';
 import moonIcon from '../assets/moon.png';
 

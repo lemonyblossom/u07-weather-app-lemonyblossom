@@ -78,7 +78,11 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
          if (searchCity) {
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=${API_KEY}&units=metric`);
             if (!response.ok) {
-               throw new Error('City not found');
+               if (response.status === 404) {
+                  throw new Error('City not found. Please check the spelling and try again.');
+               } else {
+                  throw new Error('Failed to fetch weather data.');
+               }
             }
             const data = await response.json();
             const { coord } = data;
@@ -88,6 +92,8 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
          }
       } catch (error) {
          console.error('Error fetching weather data for searched city:', error);
+      } finally {
+         setLoading(false);
       }
    };
 
