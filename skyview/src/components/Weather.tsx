@@ -114,8 +114,7 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
             </div>
          )}
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
-         {/*          {cityName && country && <h2 className='text-xl m-2'> {cityName}, {country}</h2>}
- */}         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
+         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
       </div>
    );
 };
