@@ -13,7 +13,8 @@ const Search: React.FC<SearchProps> = ({
    handleSearch,
 }) => {
    const [suggestedCities, setSuggestedCities] = useState<string[]>([]);
-   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+   /*    const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+    */
    const formRef = useRef<HTMLFormElement>(null);
 
    useEffect(() => {

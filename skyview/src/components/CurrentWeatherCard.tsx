@@ -99,19 +99,21 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
                   <p>Wind Direction: {currentWeather.wind.deg}°</p>
                   {currentWeather.rain && currentWeather.rain['1h'] && <p>Rain (1h): {currentWeather.rain['1h']} mm</p>}
                </div>
-               <div className="sun-position-data flex flex-col justify-end m-1 py-2 w-full">
-                  <div className="sunrise flex flex-row w-full">
-                     <p>Sunrise</p>
-                     <p className="m-1">{sunriseTime instanceof Date && !isNaN(sunriseTime.getTime()) ? formatTime(sunriseTime) : 'Invalid date'}</p>
-                     <img className="w-8" src={sunrise} alt="sunrise" />
-                  </div>
-                  <div className="sunset flex flex-row w-full">
-                     <p>Sunset</p>
-                     <p className="m-1">{sunsetTime instanceof Date && !isNaN(sunsetTime.getTime()) ? formatTime(sunsetTime) : 'Invalid date'}</p>
-                     <img className="w-8" src={sunset} alt="sunset" />
-                  </div>
+               <div className='sun-container flex flex-row'>
+                  <div className="sun-position-data flex flex-col justify-between m-1 py-2 w-full">
 
-                  <div className="sun-progress relative mt-2 w-24 h-24">
+                     <div className="sunrise flex flex-row w-full">
+                        <p>Sunrise</p>
+                        <p className="m-1">{sunriseTime instanceof Date && !isNaN(sunriseTime.getTime()) ? formatTime(sunriseTime) : 'Invalid date'}</p>
+                        <img className="w-8" src={sunrise} alt="sunrise" />
+                     </div>
+                     <div className="sunset flex flex-row w-full">
+                        <p>Sunset</p>
+                        <p className="m-1">{sunsetTime instanceof Date && !isNaN(sunsetTime.getTime()) ? formatTime(sunsetTime) : 'Invalid date'}</p>
+                        <img className="w-8" src={sunset} alt="sunset" />
+                     </div>
+                  </div>
+                  <div className="sun-progress relative mt-2 w-full h-24">
                      <svg className="absolute" width="100%" height="100%" viewBox="0 0 100 100">
                         <circle
                            cx="50"
