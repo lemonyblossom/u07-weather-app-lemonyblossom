@@ -11,7 +11,7 @@ function App(): JSX.Element {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden text-blue-900 ">
+    <div className="relative h-screen w-screen overflow-hidden text-blue-950 ">
       {/* Gradient Background */}
       <div className="fixed inset-0 bg-gradient-to-tr from-blue-400 via-blue-100 to-blue-200 dark:bg-gradient-to-b dark:from-blue-950  dark:to-blue-500/70 z-0"></div>
 

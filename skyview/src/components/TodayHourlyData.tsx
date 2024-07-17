@@ -6,7 +6,7 @@ interface TodayHourlyDataProps {
 
 const TodayHourlyData: React.FC<TodayHourlyDataProps> = ({ todayData, tempUnit, weatherIcons }) => {
    return (
-      <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-gradient-to-tr from-blue-200 via-blue-100 to-blue-200 shadow-lg rounded-b-lg rounded-t-none p-2">
+      <div className="forecast-today-card flex flex-col md:flex-col lg:flex-row justify-between bg-gradient-to-tl from-blue-200 via-blue-100 to-blue-200/30 dark:bg-gradient-to-b dark:from-blue-900/70 dark:to-blue-950 dark:text-blue-100 dark:border-blue-700 shadow-lg rounded-b-lg rounded-t-none p-2">
          <div className="w-full flex flex-col justify-center md:flex-row">
             <b className="w-1/2 px-2">Temps until midnight</b>
             <br />

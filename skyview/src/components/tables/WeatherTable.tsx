@@ -6,14 +6,14 @@ interface WeatherTableProps {
 const WeatherTable: React.FC<WeatherTableProps> = ({ data }) => {
    return (
       <div className="weather-details-container w-full">
-         <table className="min-w-full rounded bg-cyan-200 dark:bg-gray-800">
+         <table className="min-w-full rounded">
             <tbody>
                {data.map((item, index) => (
                   <tr key={index}>
-                     <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
+                     <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-blue-950 dark:text-blue-100">
                         {item.label}
                      </td>
-                     <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                     <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-blue-950 dark:text-blue-100">
                         {item.value}
                      </td>
                   </tr>

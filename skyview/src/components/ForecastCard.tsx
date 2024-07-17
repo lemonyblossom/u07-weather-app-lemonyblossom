@@ -71,7 +71,7 @@ const ForecastCard: React.FC<ForecastCardProps> = ({ forecastWeather, weatherIco
    const { filteredData, todayData } = filterForecastData();
 
    return (
-      <div>
+      <div className='mt-1 rounded-md'>
          {todayData && <TodayHourlyData todayData={todayData} tempUnit={tempUnit} weatherIcons={weatherIcons} />}
 
          <h3 className="m-2 dark:text-blue-100 font-medium">5-day forecast</h3>

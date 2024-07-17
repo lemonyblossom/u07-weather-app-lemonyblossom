@@ -98,7 +98,7 @@ const Search: React.FC<SearchProps> = ({
       <form ref={formRef} onSubmit={handleSubmit} className="flex flex-col items-center m-2">
          <div className="relative w-full">
             <input
-               className="border border-blue-200 p-2 rounded-lg w-full dark:bg-blue-950/70 dark:border-blue-800 dark:text-blue-100"
+               className="border border-blue-200/70 p-2 rounded-lg w-full dark:bg-blue-950/70 dark:border-blue-950 dark:text-blue-100"
                type="text"
                value={searchCity}
                onChange={(e) => {

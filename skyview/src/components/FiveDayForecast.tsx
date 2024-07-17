@@ -17,7 +17,7 @@ const FiveDayForecast: React.FC<FiveDayForecastProps> = ({ filteredData, tempUni
          {filteredData.map((item: any, index: number) => (
             <div
                key={index}
-               className={`forecast-card flex flex-col bg-gradient-to-tr ${index % 2 === 0 ? 'from-blue-100 via-blue-200 to-blue-300' : 'from-blue-300 via-blue-200 to-blue-100'} border-1 border-blue-300 shadow-lg rounded-lg px-4 py-2 m-1 lg:items-center lg:p-5 dark:bg-gradient-to-tr ${index % 2 === 0 ? 'from-indigo-300 via-blue-500 to-indigo-600' : 'from-indigo-600 via-indigo-500 to-blue-300'} dark:border-gray-700`}
+               className={`forecast-card flex flex-col bg-gradient-to-tr ${index % 2 === 0 ? 'from-blue-100 via-blue-200 to-blue-300/60' : 'from-blue-300/60 via-blue-200 to-blue-100'} border-1 border-blue-300 shadow-lg rounded-lg px-4 py-2 m-1 lg:items-center lg:p-5 dark:text-blue-100 dark:bg-gradient-to-tr ${index % 2 === 0 ? 'dark:from-blue-950 dark:to-blue-600/40' : 'dark:from-blue-600/40 dark:to-blue-950'} dark:border-blue-700`}
             >
                <div className="forecast-content flex flex-col w-full lg:w-3/4 p-1">
                   <b className="dark:text-blue-100">{item.dayOfWeek}</b>

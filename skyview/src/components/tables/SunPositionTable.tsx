@@ -16,24 +16,24 @@ const SunPositionTable: React.FC<SunPositionTableProps> = ({ sunriseTime, sunset
          <table className="w-1/2 md:w-full h-full md:h-1/4">
             <tbody>
                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-900 dark:text-blue-700">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-950 dark:text-blue-100">
                      Sunrise
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 dark:text-blue-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm ">
                      {sunriseTime instanceof Date && !isNaN(sunriseTime.getTime()) ? formatTime(sunriseTime) : 'Invalid date'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 dark:text-blue-400">
+                  <td className="px-6 py-4 whitespace-nowrap ">
                      <img className="w-8" src={sunrise} alt="sunrise" />
                   </td>
                </tr>
                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-900 dark:text-blue-200">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-950 dark:text-blue-100">
                      Sunset
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 dark:text-blue-400">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-950 dark:text-blue-100">
                      {sunsetTime instanceof Date && !isNaN(sunsetTime.getTime()) ? formatTime(sunsetTime) : 'Invalid date'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-500 dark:text-blue-400">
+                  <td className="px-6 py-4 whitespace-nowrap">
                      <img className="w-8" src={sunset} alt="sunset" />
                   </td>
                </tr>

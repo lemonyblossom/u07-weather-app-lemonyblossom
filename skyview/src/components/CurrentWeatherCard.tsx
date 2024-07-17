@@ -4,6 +4,7 @@ import moonIcon from '../assets/moon.png';
 import SunPositionTable from './tables/SunPositionTable';
 import WeatherTable from './tables/WeatherTable';
 import WindTable from './tables/WindTable';
+import SunProgress from './SunProgress';
 
 interface CurrentWeatherCardProps {
    currentWeather: any;
@@ -30,7 +31,9 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
    const sunsetTime = new Date((currentWeather.sys.sunset + currentWeather.timezone) * 1000);
 
    // Check day or night
-   const isDaytime = now >= sunriseTime.getTime() && now <= sunsetTime.getTime();
+   const isDaytime = (sunriseTime: Date, sunsetTime: Date) => {
+      return now >= sunriseTime.getTime() && now <= sunsetTime.getTime();
+   };
 
    // Calculate current sun position
    const sunPosition =
@@ -56,7 +59,7 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
    });
 
    return (
-      <div className="current-card p-2 bg-gradient-to-tr from-blue-200 via-blue-100 to-blue-200 shadow-lg rounded-t-lg rounded-b-none">
+      <div className="current-card p-2 bg-gradient-to-t from-blue-200/20 via-blue-100 to-blue-300/60 dark:bg-gradient-to-t dark:from-blue-900/70 dark:to-blue-950 dark:text-blue-200  shadow-lg rounded-md rounded-b-none">
          <div className="current-data-container flex flex-col items-center">
 
             <h2 className="text-2xl m-1">{formattedDate}</h2>
@@ -97,52 +100,17 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
 
                </div>
 
-               <div className="second-section-card flex flex-col w-full md:w-1/2">
+               <div className="second-section-card flex flex-row md:flex-col w-full md:w-1/2">
                   <SunPositionTable
                      sunriseTime={sunriseTime}
                      sunsetTime={sunsetTime}
                      formatTime={formatTime}
                   />
-                  <div className='sun-container flex flex-row w-full h-full md:flex-col md:justify-between'>
+                  <SunProgress
+                     sunPosition={sunPosition}
+                     isDaytime={isDaytime(sunriseTime, sunsetTime)}
+                  />
 
-                     <div className="sun-position-data flex flex-row md:flex-col justify-between w-full h-full">
-
-                        <div className='progress-wrapper flex flex-col w-1/2 md:h-full md:w-full md:justify-center'>
-                           <div className="sun-progress flex relative mt-2 w-full h-full ">
-                              <svg className="absolute inset-0 w-full h-full min-w-24 min-h-24" viewBox="0 0 100 100">
-                                 <circle
-                                    cx="50"
-                                    cy="50"
-                                    r="40"
-                                    fill="none"
-                                    strokeWidth="6"
-                                    stroke="#b6caf0"
-                                    strokeDasharray="251.2"
-                                    transform="rotate(93 50 50)"
-                                 />
-                                 <circle
-                                    cx="50"
-                                    cy="50"
-                                    r="40"
-                                    fill="none"
-                                    strokeWidth="9"
-                                    stroke="#ffec8c"
-                                    strokeLinecap="round"
-                                    strokeDasharray="251.2"
-                                    strokeDashoffset={251.2 - (251.2 * sunPosition) / 100}
-                                    transform="rotate(93 50 50)"
-                                 />
-                              </svg>
-                              <img
-                                 className="progressIcon min-w-10 absolute top-0 left-0 right-0 bottom-0 m-auto"
-                                 src={isDaytime ? sunIcon : moonIcon}  //toggle icon daytime/nighttiime
-                                 alt={isDaytime ? 'Sun Icon' : 'Moon Icon'}
-                              />
-                           </div>
-                        </div>
-                     </div>
-
-                  </div>
                </div>
             </div>
          </div>
