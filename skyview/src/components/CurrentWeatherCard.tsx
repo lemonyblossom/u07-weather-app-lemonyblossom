@@ -1,9 +1,9 @@
 import WeatherIcon from './WeatherIcon';
 import sunIcon from '../assets/sun-position.png';
 import moonIcon from '../assets/moon.png';
-import SunPositionTable from './sunPositionTable';
-import WeatherTable from './WeatherTable';
-import WindTable from './WindTable';
+import SunPositionTable from './tables/SunPositionTable';
+import WeatherTable from './tables/WeatherTable';
+import WindTable from './tables/WindTable';
 
 interface CurrentWeatherCardProps {
    currentWeather: any;
