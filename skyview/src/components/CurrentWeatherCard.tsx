@@ -1,9 +1,9 @@
-import React from 'react';
 import WeatherIcon from './WeatherIcon';
-import sunrise from '../assets/sunriseIcon.png';
-import sunset from '../assets/sunsetIcon.png';
 import sunIcon from '../assets/sun-position.png';
 import moonIcon from '../assets/moon.png';
+import SunPositionTable from './sunPositionTable';
+import WeatherTable from './WeatherTable';
+import WindTable from './WindTable';
 
 interface CurrentWeatherCardProps {
    currentWeather: any;
@@ -78,120 +78,34 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
             <div className='table-wrapper flex flex-col md:flex-row w-full'>
                <div className="first-section-card flex flex-col w-full md:w-1/2">
 
-                  <div className="weather-details-container w-full">
-                     <table className="min-w-full rounded bg-cyan-200 dark:bg-gray-800">
-                        <tbody>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Weather
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.weather[0].description}
-                              </td>
-                           </tr>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Cloudiness
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.clouds.all}%
-                              </td>
-                           </tr>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Humidity
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.main.humidity}%
-                              </td>
-                           </tr>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Pressure
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.main.pressure} hPa
-                              </td>
-                           </tr>
-                           {currentWeather.rain && currentWeather.rain['1h'] && (
-                              <tr>
-                                 <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                    Rain (1h)
-                                 </td>
-                                 <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {currentWeather.rain['1h']} mm
-                                 </td>
-                              </tr>
-                           )}
-                        </tbody>
-                     </table>
-                  </div>
+                  <WeatherTable
+                     title="Weather"
+                     data={[
+                        { label: 'Weather', value: currentWeather.weather[0].description },
+                        { label: 'Cloudiness', value: `${currentWeather.clouds.all}%` },
+                        { label: 'Humidity', value: `${currentWeather.main.humidity}%` },
+                        { label: 'Pressure', value: `${currentWeather.main.pressure} hPa` },
+                        { label: 'Rain (1h)', value: currentWeather.rain && currentWeather.rain['1h'] ? `${currentWeather.rain['1h']} mm` : '' },
+                     ]}
+                  />
 
-                  <div className="wind-details w-full">
-                     <table className="min-w-full bg-lime-200 dark:bg-gray-800">
-                        <tbody>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Wind Speed
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.wind.speed} m/s
-                              </td>
-                           </tr>
-                           <tr>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                 Wind Direction
-                              </td>
-                              <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                 {currentWeather.wind.deg}°
-                              </td>
-                           </tr>
-                           {currentWeather.rain && currentWeather.rain['1h'] && (
-                              <tr>
-                                 <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                    Rain (1h)
-                                 </td>
-                                 <td className="px-6 py-4 w-1/2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {currentWeather.rain['1h']} mm
-                                 </td>
-                              </tr>
-                           )}
-                        </tbody>
-                     </table>
-                  </div>
+                  <WindTable
+                     windSpeed={currentWeather.wind.speed}
+                     windDirection={currentWeather.wind.deg}
+                     rain1h={currentWeather.rain && currentWeather.rain['1h'] ? currentWeather.rain['1h'] : undefined}
+                  />
 
                </div>
 
                <div className="second-section-card flex flex-col w-full md:w-1/2">
+                  <SunPositionTable
+                     sunriseTime={sunriseTime}
+                     sunsetTime={sunsetTime}
+                     formatTime={formatTime}
+                  />
                   <div className='sun-container flex flex-row w-full h-full md:flex-col md:justify-between'>
 
                      <div className="sun-position-data flex flex-row md:flex-col justify-between w-full h-full">
-                        <table className="w-1/2 md:w-full h-full md:h-1/4 bg-white dark:bg-gray-800">
-                           <tbody>
-                              <tr>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                    Sunrise
-                                 </td>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {sunriseTime instanceof Date && !isNaN(sunriseTime.getTime()) ? formatTime(sunriseTime) : 'Invalid date'}
-                                 </td>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    <img className="w-8" src={sunrise} alt="sunrise" />
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-200">
-                                    Sunset
-                                 </td>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    {sunsetTime instanceof Date && !isNaN(sunsetTime.getTime()) ? formatTime(sunsetTime) : 'Invalid date'}
-                                 </td>
-                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                    <img className="w-8" src={sunset} alt="sunset" />
-                                 </td>
-                              </tr>
-                           </tbody>
-                        </table>
 
                         <div className='progress-wrapper flex flex-col w-1/2 md:h-full md:w-full md:justify-center'>
                            <div className="sun-progress flex relative mt-2 w-full h-full ">
@@ -221,7 +135,7 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
                               </svg>
                               <img
                                  className="progressIcon min-w-10 absolute top-0 left-0 right-0 bottom-0 m-auto"
-                                 src={isDaytime ? sunIcon : moonIcon}  // Use isDaytime to determine the icon
+                                 src={isDaytime ? sunIcon : moonIcon}  //toggle icon daytime/nighttiime
                                  alt={isDaytime ? 'Sun Icon' : 'Moon Icon'}
                               />
                            </div>

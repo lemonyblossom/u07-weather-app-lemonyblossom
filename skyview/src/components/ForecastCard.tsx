@@ -1,4 +1,3 @@
-import React from 'react';
 interface ForecastCardProps {
    forecastWeather: any;
    weatherIcons: { [key: string]: string };
