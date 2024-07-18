@@ -1,6 +1,4 @@
 import WeatherIcon from './WeatherIcon';
-import sunIcon from '../assets/sun-position.png';
-import moonIcon from '../assets/moon.png';
 import SunPositionTable from './tables/SunPositionTable';
 import WeatherTable from './tables/WeatherTable';
 import WindTable from './tables/WindTable';
@@ -20,26 +18,29 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
    convertTemperature,
 }) => {
    const today = new Date();
-   const now = today.getTime();
 
    // Ensure existence
    if (!currentWeather.sys || !currentWeather.sys.sunrise || !currentWeather.sys.sunset) {
       return null;
    }
 
+   // Convert sunrise and sunset to local time for searched city
    const sunriseTime = new Date((currentWeather.sys.sunrise + currentWeather.timezone) * 1000);
    const sunsetTime = new Date((currentWeather.sys.sunset + currentWeather.timezone) * 1000);
 
-   // Check day or night
+   // Get local time for searched city
+   const localTime = new Date(today.getTime() + currentWeather.timezone * 1000);
+
+   // Check if daytime
    const isDaytime = (sunriseTime: Date, sunsetTime: Date) => {
-      return now >= sunriseTime.getTime() && now <= sunsetTime.getTime();
+      return localTime >= sunriseTime && localTime <= sunsetTime;
    };
 
-   // Calculate current sun position
+   // Calculate sun position
    const sunPosition =
-      now >= sunriseTime.getTime() && now <= sunsetTime.getTime()
-         ? ((now - sunriseTime.getTime()) / (sunsetTime.getTime() - sunriseTime.getTime())) * 100
-         : now < sunriseTime.getTime()
+      localTime >= sunriseTime && localTime <= sunsetTime
+         ? ((localTime.getTime() - sunriseTime.getTime()) / (sunsetTime.getTime() - sunriseTime.getTime())) * 100
+         : localTime < sunriseTime
             ? 0
             : 100;
 
@@ -47,19 +48,19 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
       return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
    };
 
-   // Convert temperature and feels like
+   // temperature 
    const temperature = convertTemperature(currentWeather.main.temp);
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
    // Formatted date
-   const formattedDate = today.toLocaleDateString('en-US', {
+   const formattedDate = localTime.toLocaleDateString('en-US', {
       weekday: 'long',
       month: 'long',
       day: 'numeric',
    });
 
    return (
-      <div className="current-card p-2 bg-gradient-to-t from-blue-200/20 via-blue-100 to-blue-300/60 dark:bg-gradient-to-t dark:from-blue-900/70 dark:to-blue-950 dark:text-blue-200  shadow-lg rounded-md rounded-b-none">
+      <div className="current-card p-2 bg-gradient-to-t from-blue-200/20 via-blue-100 to-blue-300/60 dark:bg-gradient-to-t dark:from-blue-900/70 dark:to-blue-950 dark:text-blue-200 shadow-lg rounded-md rounded-b-none">
          <div className="current-data-container flex flex-col items-center">
 
             <h2 className="text-2xl m-1">{formattedDate}</h2>
@@ -105,12 +106,12 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
                      sunriseTime={sunriseTime}
                      sunsetTime={sunsetTime}
                      formatTime={formatTime}
+                     currentTime={localTime}
                   />
                   <SunProgress
                      sunPosition={sunPosition}
                      isDaytime={isDaytime(sunriseTime, sunsetTime)}
                   />
-
                </div>
             </div>
          </div>
