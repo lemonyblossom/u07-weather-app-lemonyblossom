@@ -4,7 +4,7 @@ import sunset from '../../assets/sunsetIcon.png';
 interface SunPositionTableProps {
    sunriseTime: Date;
    sunsetTime: Date;
-   currentTime: Date;  // Add this line
+   currentTime: Date;
    formatTime: (time: Date) => string;
 }
 
