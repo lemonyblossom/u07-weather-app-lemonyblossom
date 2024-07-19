@@ -3,6 +3,7 @@ import SunPositionTable from './tables/SunPositionTable';
 import WeatherTable from './tables/WeatherTable';
 import WindTable from './tables/WindTable';
 import SunProgress from './SunProgress';
+import Clock from './Clock';
 
 interface CurrentWeatherCardProps {
    currentWeather: any;
@@ -24,19 +25,16 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
       return null;
    }
 
-   // Convert sunrise and sunset to local time for searched city
    const sunriseTime = new Date((currentWeather.sys.sunrise + currentWeather.timezone) * 1000);
    const sunsetTime = new Date((currentWeather.sys.sunset + currentWeather.timezone) * 1000);
 
-   // Get local time for searched city
    const localTime = new Date(today.getTime() + currentWeather.timezone * 1000);
 
-   // Check if daytime
+
    const isDaytime = (sunriseTime: Date, sunsetTime: Date) => {
       return localTime >= sunriseTime && localTime <= sunsetTime;
    };
 
-   // Calculate sun position
    const sunPosition =
       localTime >= sunriseTime && localTime <= sunsetTime
          ? ((localTime.getTime() - sunriseTime.getTime()) / (sunsetTime.getTime() - sunriseTime.getTime())) * 100
@@ -48,11 +46,11 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
       return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
    };
 
-   // temperature 
+
    const temperature = convertTemperature(currentWeather.main.temp);
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
-   // Formatted date
+
    const formattedDate = localTime.toLocaleDateString('en-US', {
       weekday: 'long',
       month: 'long',
@@ -64,6 +62,7 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
          <div className="current-data-container flex flex-col items-center">
 
             <h2 className="text-2xl m-1">{formattedDate}</h2>
+            <Clock timezoneOffset={currentWeather.timezone} />
 
             <div className="today-temp w-full flex flex-col p-2 items-center">
                {currentWeather.weather && currentWeather.weather[0].icon && (
