@@ -2,6 +2,15 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* .custom-gradient {
+  background-image: linear-gradient(45deg,
+      #2196F3 0%,
+      #E91E63 25%,
+      #FF9800 50%,
+      #FFEB3B 75%,
+      #4CAF50 100%);
+} */
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -19,16 +28,16 @@
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: #4e518d;
   text-decoration: inherit;
 }
 
 a:hover {
-  color: #535bf2;
+  color: #3b3e73;
 }
 
 body {
-  color: #cbceff;
+  color: #ffffff;
   margin: 0;
   display: flex;
   place-items: center;
@@ -55,7 +64,7 @@ button {
 }
 
 button:hover {
-  border-color: #646cff;
+  border-color: #8fbcff;
 }
 
 button:focus,
@@ -70,7 +79,7 @@ button:focus-visible {
   }
 
   a:hover {
-    color: #747bff;
+    color: #8fbcff;
   }
 
   button {

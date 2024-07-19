@@ -7,9 +7,10 @@ import Search from './Search';
 
 interface WeatherProps {
    tempUnit: 'celsius' | 'fahrenheit';
+   toggleTempUnit: () => void;
 }
 
-const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
+const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
    const [forecastWeather, setForecastWeather] = useState<any>(null);
    const [searchCity, setSearchCity] = useState<string>('');
@@ -62,25 +63,13 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
       }
    };
 
-   // Convert Celsius to Fahrenheit
-   const celsiusToFahrenheit = (celsius: number) => {
-      return (celsius * 9) / 5 + 32;
-   };
-
-   // Convert Fahrenheit to Celsius
-   const fahrenheitToCelsius = (fahrenheit: number) => {
-      return ((fahrenheit - 32) * 5) / 9;
-   };
-
-   // Function to decide which conversion function to use
    const convertTemperature = (temp: number) => {
       if (tempUnit === 'celsius') {
          return temp;
       }
-      return celsiusToFahrenheit(temp);
+      return (temp * 9) / 5 + 32;
    };
 
-   // CITY SEARCH
    const handleSearch = async (e: React.FormEvent) => {
       e.preventDefault();
       setLoading(true);
@@ -89,7 +78,11 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
          if (searchCity) {
             const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=${API_KEY}&units=metric`);
             if (!response.ok) {
-               throw new Error('City not found');
+               if (response.status === 404) {
+                  throw new Error('City not found. Please check the spelling and try again.');
+               } else {
+                  throw new Error('Failed to fetch weather data.');
+               }
             }
             const data = await response.json();
             const { coord } = data;
@@ -99,17 +92,29 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit }) => {
          }
       } catch (error) {
          console.error('Error fetching weather data for searched city:', error);
+      } finally {
+         setLoading(false);
       }
    };
 
    return (
       <div>
-         {cityName && country && <p className='text-xl m-4 flex justify-center'> {cityName}, {country}</p>}
+         {loading && <p className="text-center text-xl text-white font-medium">Loading...</p>}
          {error && <p className="text-red-500">{error}</p>}
          <Search searchCity={searchCity} setSearchCity={setSearchCity} handleSearch={handleSearch} />
+         {cityName && country && <p className='cityNameDisplay px-2 text-3xl font-bold mt-5 flex justify-start dark:text-blue-200'> {cityName}, {country}</p>}
+
+         {currentWeather && forecastWeather && (
+            <div className=" toggleUnit mb-2 flex justify-end">
+               <button
+                  onClick={toggleTempUnit}
+                  className="ml-2 bg-gradient-to-t from-blue-400 to-blue-100  text-xl text-white font-medium border-1 border-blue-300 shadow-lg px-3 py-2 rounded-lg dark:bg-gradient-to-b dark:from-blue-950/80 dark:to-blue-900 dark:text-blue-200 dark:border-blue-700">
+                  Unit ({tempUnit})
+               </button>
+            </div>
+         )}
          {currentWeather && <CurrentWeatherCard currentWeather={currentWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
-         {cityName && country && <h2 className='text-xl m-4'> 5-day forecast for {cityName}, {country}</h2>}
-         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={tempUnit === 'celsius' ? celsiusToFahrenheit : fahrenheitToCelsius} />}
+         {forecastWeather && <ForecastCard forecastWeather={forecastWeather} weatherIcons={weatherIcons} tempUnit={tempUnit} convertTemperature={convertTemperature} />}
       </div>
    );
 };
