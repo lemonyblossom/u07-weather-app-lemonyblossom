@@ -13,11 +13,11 @@ interface WeatherProps {
 const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
    const [currentWeather, setCurrentWeather] = useState<any>(null);
    const [forecastWeather, setForecastWeather] = useState<any>(null);
-   const [searchCity, setSearchCity] = useState<string>('');
    const [loading, setLoading] = useState<boolean>(false);
    const [cityName, setCityName] = useState<string>('');
    const [country, setCountry] = useState<string>('');
    const [weatherIcons, setWeatherIcons] = useState<{ [key: string]: string }>({});
+   const [searchCity, setSearchCity] = useState<string>('');
 
    const { latitude, longitude, error } = useGeolocation();
 
@@ -49,6 +49,7 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
       }
    };
 
+
    const fetchWeatherIcons = async () => {
       const icons: { [key: string]: string } = {};
       try {
@@ -70,28 +71,32 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
       return (temp * 9) / 5 + 32;
    };
 
-   const handleSearch = async (e: React.FormEvent) => {
-      e.preventDefault();
+   /* const handleSearch = async (lat: number, lon: number) => {
       setLoading(true);
 
       try {
-         if (searchCity) {
-            const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${searchCity}&appid=${API_KEY}&units=metric`);
-            if (!response.ok) {
-               if (response.status === 404) {
-                  throw new Error('City not found. Please check the spelling and try again.');
-               } else {
-                  throw new Error('Failed to fetch weather data.');
-               }
-            }
-            const data = await response.json();
-            const { coord } = data;
-            fetchWeatherData(coord.lat, coord.lon);
-            setCityName(data.name);
-            setCountry(data.sys.country);
+         // Fetch weather data using lat and lon
+         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+         if (!response.ok) {
+            throw new Error("Failed to fetch weather data.");
          }
+         const data = await response.json();
+         // Handle fetched weather data
+         setCityName(data.name);
+         setCountry(data.sys.country);
+         // Optionally fetch forecast data or other actions
       } catch (error) {
-         console.error('Error fetching weather data for searched city:', error);
+         console.error('Error fetching weather data:', error);
+      } finally {
+         setLoading(false);
+      }
+   }; */
+   const handleSearch = async (lat: number, lon: number) => {
+      setLoading(true);
+      try {
+         await fetchWeatherData(lat, lon); // Reuse the existing fetchWeatherData function
+      } catch (error) {
+         console.error('Error fetching weather data:', error);
       } finally {
          setLoading(false);
       }
