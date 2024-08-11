@@ -89,8 +89,6 @@ const Search: React.FC<SearchProps> = ({
       setSearchCity('');
    };
 
-
-
    const handleSuggestionClick = async (city: City, e: React.MouseEvent<HTMLLIElement, MouseEvent>) => {
       e.preventDefault();
       setSelectedCity(city);
