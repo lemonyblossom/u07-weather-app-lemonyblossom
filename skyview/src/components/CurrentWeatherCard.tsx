@@ -1,5 +1,9 @@
-import React from 'react';
 import WeatherIcon from './WeatherIcon';
+import SunPositionTable from './tables/SunPositionTable';
+import WeatherTable from './tables/WeatherTable';
+import WindTable from './tables/WindTable';
+import SunProgress from './SunProgress';
+import Clock from './Clock';
 
 interface CurrentWeatherCardProps {
    currentWeather: any;
@@ -8,50 +12,106 @@ interface CurrentWeatherCardProps {
    convertTemperature: (temp: number) => number;
 }
 
-const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({ currentWeather, weatherIcons, tempUnit, convertTemperature }) => {
-   // Get today's date
+const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
+   currentWeather,
+   weatherIcons,
+   tempUnit,
+   convertTemperature,
+}) => {
    const today = new Date();
-   const formattedDate = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
-   // Convert temperatures
+   // Ensure existence
+   if (!currentWeather.sys || !currentWeather.sys.sunrise || !currentWeather.sys.sunset) {
+      return null;
+   }
+
+   const sunriseTime = new Date((currentWeather.sys.sunrise + currentWeather.timezone) * 1000);
+   const sunsetTime = new Date((currentWeather.sys.sunset + currentWeather.timezone) * 1000);
+
+   const localTime = new Date(today.getTime() + currentWeather.timezone * 1000);
+
+
+   const isDaytime = (sunriseTime: Date, sunsetTime: Date) => {
+      return localTime >= sunriseTime && localTime <= sunsetTime;
+   };
+
+   const sunPosition =
+      localTime >= sunriseTime && localTime <= sunsetTime
+         ? ((localTime.getTime() - sunriseTime.getTime()) / (sunsetTime.getTime() - sunriseTime.getTime())) * 100
+         : localTime < sunriseTime
+            ? 0
+            : 100;
+
+   const formatTime = (time: Date) => {
+      return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+   };
+
+
    const temperature = convertTemperature(currentWeather.main.temp);
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
 
-   return (
-      <div className="bg-blue-200 p-5 rounded-lg m-2">
-         {/* Display weekday and date */}
-         <h2 className="text-2xl mb-5">{formattedDate}</h2>
 
-         <div className="bg-white dark:bg-slate-800 p-5 rounded grid grid-cols-3 gap-6">
-            {/* Temperature Display */}
-            <div className="bg-lightblue p-5 rounded">
-               <div className="flex justify-center items-center">
-                  {currentWeather.weather && currentWeather.weather[0].icon && (
-                     <WeatherIcon iconUrl={weatherIcons[currentWeather.weather[0].icon]} altText="Weather Icon" className="w-70 h-70" />
-                  )}
-                  <strong className="ml-4 text-4xl">{Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}</strong>
-               </div>
+   const formattedDate = localTime.toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+   });
+
+   return (
+      <div className="current-card p-2 bg-gradient-to-t from-blue-200/20 via-blue-100 to-blue-300/60 dark:bg-gradient-to-t dark:from-blue-900/70 dark:to-blue-950 dark:text-blue-200 shadow-lg rounded-md rounded-b-none">
+         <div className="current-data-container flex flex-col items-center">
+
+            <h2 className="text-2xl m-1">{formattedDate}</h2>
+            <Clock timezoneOffset={currentWeather.timezone} />
+
+            <div className="today-temp w-full flex flex-col p-2 items-center">
+               {currentWeather.weather && currentWeather.weather[0].icon && (
+                  <WeatherIcon
+                     iconUrl={weatherIcons[currentWeather.weather[0].icon]}
+                     altText="Weather Icon"
+                     className="w-70 h-70"
+                  />
+               )}
+               <strong className="text-4xl">
+                  {Math.floor(temperature)}°{tempUnit === 'celsius' ? 'C' : 'F'}
+               </strong>
                <p className="mt-2">Feels Like: {Math.floor(feelsLike)}°{tempUnit === 'celsius' ? 'C' : 'F'}</p>
             </div>
 
-            {/* Humidity Display */}
-            <div className="bg-lightgreen p-5 rounded">
-               <h3 className="mb-2">Humidity</h3>
-               <p>{currentWeather.main.humidity}%</p>
-            </div>
+            <div className='table-wrapper flex flex-col md:flex-row w-full'>
+               <div className="first-section-card flex flex-col w-full md:w-1/2">
 
-            {/* Sunrise and Sunset Display */}
-            <div className="p-5 rounded flex flex-col items-center justify-center">
-               <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01d.png`} altText="Sunrise" />
-               <div className="flex items-center mt-2">
-                  Sunrise
-                  <p className="ml-2 text-4xl">{new Date(currentWeather.sys.sunrise * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  <WeatherTable
+                     title="Weather"
+                     data={[
+                        { label: 'Weather', value: currentWeather.weather[0].description },
+                        { label: 'Cloudiness', value: `${currentWeather.clouds.all}%` },
+                        { label: 'Humidity', value: `${currentWeather.main.humidity}%` },
+                        { label: 'Pressure', value: `${currentWeather.main.pressure} hPa` },
+                        { label: 'Rain (1h)', value: currentWeather.rain && currentWeather.rain['1h'] ? `${currentWeather.rain['1h']} mm` : '' },
+                     ]}
+                  />
+
+                  <WindTable
+                     windSpeed={currentWeather.wind.speed}
+                     windDirection={currentWeather.wind.deg}
+                     rain1h={currentWeather.rain && currentWeather.rain['1h'] ? currentWeather.rain['1h'] : undefined}
+                  />
+
                </div>
-               <div className="flex items-center mt-2">
-                  Sunset
-                  <p className="ml-2 text-4xl">{new Date(currentWeather.sys.sunset * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+
+               <div className="second-section-card flex flex-row md:flex-col w-full md:w-1/2">
+                  <SunPositionTable
+                     sunriseTime={sunriseTime}
+                     sunsetTime={sunsetTime}
+                     formatTime={formatTime}
+                     currentTime={localTime}
+                  />
+                  <SunProgress
+                     sunPosition={sunPosition}
+                     isDaytime={isDaytime(sunriseTime, sunsetTime)}
+                  />
                </div>
-               <WeatherIcon iconUrl={`http://openweathermap.org/img/wn/01n.png`} altText="Sunset" />
             </div>
          </div>
       </div>
