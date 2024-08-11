@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 interface ClockProps {
-   timezoneOffset: number;
+   timezoneOffset: number; // Timezone offset in seconds
 }
 
 const Clock: React.FC<ClockProps> = ({ timezoneOffset }) => {
@@ -15,7 +15,11 @@ const Clock: React.FC<ClockProps> = ({ timezoneOffset }) => {
       return () => clearInterval(intervalId);
    }, []);
 
-   const localTime = new Date(currentTime.getTime() + timezoneOffset * 1000);
+   // Convert current time to UTC
+   const utcTime = new Date(currentTime.getTime() + currentTime.getTimezoneOffset() * 60000);
+
+   // Apply the timezone offset
+   const localTime = new Date(utcTime.getTime() + timezoneOffset * 1000);
 
    const formattedTime = localTime.toLocaleTimeString([], {
       hour: '2-digit',
