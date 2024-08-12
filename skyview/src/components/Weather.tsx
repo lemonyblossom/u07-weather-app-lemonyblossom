@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useGeolocation from '../hooks/useGeolocation';
-import { fetchCurrentWeather, fetchForecastWeather, API_KEY } from '../api/WeatherApi';
+import { fetchCurrentWeather, fetchForecastWeather } from '../api/WeatherApi';
 import CurrentWeatherCard from './CurrentWeatherCard';
 import ForecastCard from './ForecastCard';
 import Search from './Search';
@@ -94,7 +94,7 @@ const Weather: React.FC<WeatherProps> = ({ tempUnit, toggleTempUnit }) => {
    const handleSearch = async (lat: number, lon: number) => {
       setLoading(true);
       try {
-         await fetchWeatherData(lat, lon); // Reuse the existing fetchWeatherData function
+         await fetchWeatherData(lat, lon);
       } catch (error) {
          console.error('Error fetching weather data:', error);
       } finally {

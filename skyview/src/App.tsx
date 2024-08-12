@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Weather from './components/Weather';
+import Footer from './components/Footer';
 import './index.css';
 
 function App(): JSX.Element {
-  const [count, setCount] = useState<number>(0);
   const [tempUnit, setTempUnit] = useState<'celsius' | 'fahrenheit'>('celsius');
 
   const toggleTempUnit = () => {
@@ -26,13 +26,15 @@ function App(): JSX.Element {
             <Weather tempUnit={tempUnit} toggleTempUnit={toggleTempUnit} />
           </div>
 
+
+
           <div className="mb-4 text-center">
-            {/* Count button */}
-            <button onClick={() => setCount((count) => count + 1)} className="px-2 sm:px-3 md:px-4 py-1 sm:py-2 md:py-3 bg-blue-500 text-white rounded">
-              Count is {count}
-            </button>
+
           </div>
+
         </div>
+        <Footer />
+
       </div>
     </div>
   );
