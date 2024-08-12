@@ -25,11 +25,14 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
       return null;
    }
 
+   // Convert current time to UTC
+   const utcTime = new Date(today.getTime() + today.getTimezoneOffset() * 60000);
+
+   // Applies timezone offset
+   const localTime = new Date(utcTime.getTime() + currentWeather.timezone * 1000);
+
    const sunriseTime = new Date((currentWeather.sys.sunrise + currentWeather.timezone) * 1000);
    const sunsetTime = new Date((currentWeather.sys.sunset + currentWeather.timezone) * 1000);
-
-   const localTime = new Date(today.getTime() + currentWeather.timezone * 1000);
-
 
    const isDaytime = (sunriseTime: Date, sunsetTime: Date) => {
       return localTime >= sunriseTime && localTime <= sunsetTime;
@@ -46,10 +49,8 @@ const CurrentWeatherCard: React.FC<CurrentWeatherCardProps> = ({
       return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
    };
 
-
    const temperature = convertTemperature(currentWeather.main.temp);
    const feelsLike = convertTemperature(currentWeather.main.feels_like);
-
 
    const formattedDate = localTime.toLocaleDateString('en-US', {
       weekday: 'long',
